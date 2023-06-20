@@ -1,0 +1,54 @@
+﻿@using Persistence;
+@using Items;
+
+@page "/todo"
+
+<h1>Todo (@todos.Count(todo => !todo.IsDone))</h1>
+
+@foreach (var titles in todosFromDisk)
+{
+    <li>
+        <h2>@titles.Title</h2>
+    </li>
+}
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            <input type="checkbox" @bind="todo.IsDone" @onclick="AddTodo" />
+            <input @bind="todo.Title" />
+        </li>
+    }
+</ul>
+
+<input placeholder="Something todo" @bind="newTodo" />
+<button @onclick="AddTodo">Add todo</button>
+
+@code {
+    private string? newTodo;
+    private TodoItem? Item;
+    private List<TodoItem> todos = new();
+    private List<TodoItem> todosFromDisk = new();
+    Persistence.SaveToFile db = new Persistence.SaveToFile();
+    Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
+
+    protected override void OnInitialized()
+    {
+        todosFromDisk = getFiles.ObjectsFromFile();
+    }
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            Item = new TodoItem { Title = newTodo };
+            todos.Add(Item);
+            newTodo = string.Empty;
+        }
+        if (Item is not null && !string.IsNullOrWhiteSpace(Item.Title))
+        {
+            db.ObjectToFile( Item, Item.Title );
+        }
+    }
+}
