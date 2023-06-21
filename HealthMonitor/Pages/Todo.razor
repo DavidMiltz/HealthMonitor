@@ -1,11 +1,11 @@
 ﻿@using Persistence;
-@using Items;
+@using Days;
 
 @page "/todo"
 
-<h1>Todo (@todos.Count(todo => !todo.IsDone))</h1>
+<h1>Todo (@days.Count(day => !day.IsDone))</h1>
 
-@foreach (var titles in todosFromDisk)
+@foreach (var titles in daysFromDisk)
 {
     <li>
         <h2>@titles.Title</h2>
@@ -13,42 +13,42 @@
 }
 
 <ul>
-    @foreach (var todo in todos)
+    @foreach (var day in days)
     {
         <li>
-            <input type="checkbox" @bind="todo.IsDone" @onclick="AddTodo" />
-            <input @bind="todo.Title" />
+            <input type="checkbox" @bind="day.IsDone" @onclick="AddDay" />
+            <input @bind="day.Title" />
         </li>
     }
 </ul>
 
-<input placeholder="Something todo" @bind="newTodo" />
-<button @onclick="AddTodo">Add todo</button>
+<input placeholder="Something todo" @bind="newDay" />
+<button @onclick="AddDay">Add Day</button>
 
 @code {
-    private string? newTodo;
-    private TodoItem? Item;
-    private List<TodoItem> todos = new();
-    private List<TodoItem> todosFromDisk = new();
+    private string? newDay;
+    private Day? day;
+    private List<Day> days = new();
+    private List<Day> daysFromDisk = new();
     Persistence.SaveToFile db = new Persistence.SaveToFile();
     Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
 
     protected override void OnInitialized()
     {
-        todosFromDisk = getFiles.ObjectsFromFile();
+        daysFromDisk = getFiles.ObjectsFromFile();
     }
 
-    private void AddTodo()
+    private void AddDay()
     {
-        if (!string.IsNullOrWhiteSpace(newTodo))
+        if (!string.IsNullOrWhiteSpace(newDay))
         {
-            Item = new TodoItem { Title = newTodo };
-            todos.Add(Item);
-            newTodo = string.Empty;
+            day = new Day { Title = newDay };
+            days.Add(day);
+            newDay = string.Empty;
         }
-        if (Item is not null && !string.IsNullOrWhiteSpace(Item.Title))
+        if (day is not null && !string.IsNullOrWhiteSpace(day.Title))
         {
-            db.ObjectToFile( Item, Item.Title );
+            db.ObjectToFile( day, day.Title );
         }
     }
 }

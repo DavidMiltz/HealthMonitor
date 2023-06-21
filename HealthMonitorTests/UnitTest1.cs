@@ -1,11 +1,11 @@
 using Persistence;
-using Items;
+using Days;
 
 namespace Test;
 
     public class UnitTest1
     {
-            private List<TodoItem> todosFromDisk = new();
+            private List<Day> todosFromDisk = new();
             Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
 
         [Fact]

@@ -1,6 +1,6 @@
-namespace Items
+namespace Days
 {
-    public class TodoItem
+    public class Day
     {
         public string? Title { get; set; }
         public bool IsDone { get; set; }
