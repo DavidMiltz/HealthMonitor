@@ -1,16 +1,9 @@
 ﻿@using Persistence;
 @using Days;
 
-@page "/todo"
+@page "/day"
 
-<h1>Todo (@days.Count(day => !day.IsDone))</h1>
-
-@foreach (var titles in daysFromDisk)
-{
-    <li>
-        <h2>@titles.Title</h2>
-    </li>
-}
+<h1>AddDay (@days.Count(day => !day.IsDone))</h1>
 
 <ul>
     @foreach (var day in days)
@@ -22,12 +15,25 @@
     }
 </ul>
 
-<input placeholder="Something todo" @bind="newDay" />
-<button @onclick="AddDay">Add Day</button>
+<EditForm Model="@day" OnValidSubmit="@HandleValidSubmit">
+    <input placeholder="Something todo" @bind="newDay" />
+    <InputDate @bind-Value="day.Date" />
+    <button @onclick="AddDay">Add Day</button>y
+    <button type="submit">Submit</button>
+</EditForm>
+
+<hr>
+
+@foreach (var titles in daysFromDisk)
+{
+    <li>
+        <h2>@titles.Title</h2>
+    </li>
+}
 
 @code {
     private string? newDay;
-    private Day? day;
+    private Day day = new() { Date = DateTime.UtcNow };
     private List<Day> days = new();
     private List<Day> daysFromDisk = new();
     Persistence.SaveToFile db = new Persistence.SaveToFile();
@@ -51,4 +57,8 @@
             db.ObjectToFile( day, day.Title );
         }
     }
+
+        private void HandleValidSubmit()
+        {
+        }
 }

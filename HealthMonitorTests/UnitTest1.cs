@@ -5,13 +5,13 @@ namespace Test;
 
     public class UnitTest1
     {
-            private List<Day> todosFromDisk = new();
+            private List<Day> daysFromDisk = new();
             Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
 
         [Fact]
         public void PassingTest()
         {
-            todosFromDisk = getFiles.ObjectsFromFile();
+            daysFromDisk = getFiles.ObjectsFromFile();
         
             Assert.Equal(4, todosFromDisk.Count);
         }
