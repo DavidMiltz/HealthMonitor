@@ -3,10 +3,10 @@ using System.Text.Json;
 namespace Persistence
 {
     public class SaveToFile {
-        public bool ObjectToFile(object _Object, string _FileName)
+        public bool ObjectToFile(object _Object, DateTime _FileName)
         {
             var path = "DataBase\\"; 
-            string fileName = _FileName + ".json"; 
+            string fileName = _FileName.ToString("yyyy-dd-M--HH-mm-ss") + ".json"; 
             string jsonString = JsonSerializer.Serialize(_Object);
             File.WriteAllText(path + fileName, jsonString);
             return true;

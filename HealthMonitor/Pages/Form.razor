@@ -2,31 +2,74 @@
 
 @page "/day"
 
-<h1>AddDay (@days.Count(day => !day.IsDone))</h1>
-
 <EditForm Model="@day" OnValidSubmit="@HandleValidSubmit">
-    Datum:
-    <InputDate @bind-Value="day.Date" />
+    <label for="date">Datum</label>
+    <InputDate id="date" @bind-Value="day.Date" />
     <br/>
-    Wie haben sie geschlafen?
-    <InputSelect @bind-Value="day.QualityOfSleep">
+    <label for="sleep">Wie haben sie geschlafen?</label>
+    <InputSelect id="sleep" @bind-Value="day.QualityOfSleep">
         @for (int x = 1; x <= 10; x++)
         {
             <option value="@x">@x</option>
         }
     </InputSelect>
     <br/>
-    <InputText placeholder="Enter Title" @bind-Value="day.Title" />
+    <label for="sport">Wie viel Sport haben sie gemacht?</label>
+    <InputSelect id="sport" @bind-Value="day.Sport">
+        @for (int x = 1; x <= 10; x++)
+        {
+            <option value="@x">@x</option>
+        }
+    </InputSelect>
+    <br/> 
+    <label for="sex">Haben sie Sex gehabt?</label>
+    <InputSelect id="sex" @bind-Value="day.Sex">
+        @for (int x = 1; x <= 10; x++)
+        {
+            <option value="@x">@x</option>
+        }
+    </InputSelect>
+    <br/>
+    <label for="alcohol">Haben sie Alkohol getrunken?</label>
+    <InputSelect id="alcohol" @bind-Value="day.Alcohol">
+        @for (int x = 1; x <= 10; x++)
+        {
+            <option value="@x">@x</option>
+        }
+    </InputSelect>
+    <br/>
+    <label for="headache">Haben sie Kopfschmerzen gehabt</label>
+    <InputSelect id="headache" @bind-Value="day.Headache">
+        @for (int x = 1; x <= 10; x++)
+        {
+            <option value="@x">@x</option>
+        }
+    </InputSelect>
+    <br/>                          
+    <label for="drugs">Welche Medikamente haben sie genommen?</label>
+    <InputText @bind-Value="day.Drug" />
     <br/>
     <button type="submit">Submit</button>
 </EditForm>
 
 <hr>
 
-@foreach (var titles in daysFromDisk)
+@foreach (var testdays in daysFromDisk)
 {
     <li>
-        <h2>@titles.Title</h2>
+        @testdays.Date
+        <br>
+        @testdays.QualityOfSleep
+        <br>
+        @testdays.Drug
+        <br>
+        @testdays.Sport
+        <br>
+        @testdays.Sex
+        <br>
+        @testdays.Alcohol      
+        <br>
+        @testdays.Headache                                      
     </li>
 }
 
@@ -40,17 +83,15 @@
     protected override void OnInitialized()
     {
         daysFromDisk = getFiles.ObjectsFromFile();
+        day.Date = DateTime.Now;
     }
 
         private void HandleValidSubmit()
         {
-            if (!string.IsNullOrWhiteSpace(day.Title))
+            if (day is not null )
             {
                 days.Add(day);
-            }
-            if (day is not null && !string.IsNullOrWhiteSpace(day.Title))
-            {
-                db.ObjectToFile( day, day.Title );
+                db.ObjectToFile( day, day.Date );
             }
         }
 }
