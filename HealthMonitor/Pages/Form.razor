@@ -1,24 +1,23 @@
-﻿@using Persistence;
-@using Days;
+﻿@using Days;
 
 @page "/day"
 
 <h1>AddDay (@days.Count(day => !day.IsDone))</h1>
 
-<ul>
-    @foreach (var day in days)
-    {
-        <li>
-            <input type="checkbox" @bind="day.IsDone" @onclick="AddDay" />
-            <input @bind="day.Title" />
-        </li>
-    }
-</ul>
-
 <EditForm Model="@day" OnValidSubmit="@HandleValidSubmit">
-    <input placeholder="Something todo" @bind="newDay" />
+    Datum:
     <InputDate @bind-Value="day.Date" />
-    <button @onclick="AddDay">Add Day</button>y
+    <br/>
+    Wie haben sie geschlafen?
+    <InputSelect @bind-Value="day.QualityOfSleep">
+        @for (int x = 1; x <= 10; x++)
+        {
+            <option value="@x">@x</option>
+        }
+    </InputSelect>
+    <br/>
+    <InputText placeholder="Enter Title" @bind-Value="day.Title" />
+    <br/>
     <button type="submit">Submit</button>
 </EditForm>
 
@@ -32,8 +31,7 @@
 }
 
 @code {
-    private string? newDay;
-    private Day day = new() { Date = DateTime.UtcNow };
+    private Day day = new() {};
     private List<Day> days = new();
     private List<Day> daysFromDisk = new();
     Persistence.SaveToFile db = new Persistence.SaveToFile();
@@ -44,21 +42,15 @@
         daysFromDisk = getFiles.ObjectsFromFile();
     }
 
-    private void AddDay()
-    {
-        if (!string.IsNullOrWhiteSpace(newDay))
-        {
-            day = new Day { Title = newDay };
-            days.Add(day);
-            newDay = string.Empty;
-        }
-        if (day is not null && !string.IsNullOrWhiteSpace(day.Title))
-        {
-            db.ObjectToFile( day, day.Title );
-        }
-    }
-
         private void HandleValidSubmit()
         {
+            if (!string.IsNullOrWhiteSpace(day.Title))
+            {
+                days.Add(day);
+            }
+            if (day is not null && !string.IsNullOrWhiteSpace(day.Title))
+            {
+                db.ObjectToFile( day, day.Title );
+            }
         }
 }
