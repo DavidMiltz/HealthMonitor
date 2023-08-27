@@ -2,53 +2,60 @@
 
 @page "/day"
 
-<EditForm Model="@day" OnValidSubmit="@HandleValidSubmit">
-    <label for="date">Datum</label>
-    <InputDate id="date" @bind-Value="day.Date" />
-    <br/>
-    <label for="sleep">Wie haben sie geschlafen?</label>
-    <InputSelect id="sleep" @bind-Value="day.QualityOfSleep">
-        @for (int x = 1; x <= 10; x++)
-        {
-            <option value="@x">@x</option>
-        }
-    </InputSelect>
-    <br/>
-    <label for="sport">Wie viel Sport haben sie gemacht?</label>
-    <InputSelect id="sport" @bind-Value="day.Sport">
-        @for (int x = 1; x <= 10; x++)
-        {
-            <option value="@x">@x</option>
-        }
-    </InputSelect>
-    <br/> 
-    <label for="sex">Haben sie Sex gehabt?</label>
-    <InputSelect id="sex" @bind-Value="day.Sex">
-        @for (int x = 1; x <= 10; x++)
-        {
-            <option value="@x">@x</option>
-        }
-    </InputSelect>
-    <br/>
-    <label for="alcohol">Haben sie Alkohol getrunken?</label>
-    <InputSelect id="alcohol" @bind-Value="day.Alcohol">
-        @for (int x = 1; x <= 10; x++)
-        {
-            <option value="@x">@x</option>
-        }
-    </InputSelect>
-    <br/>
-    <label for="headache">Haben sie Kopfschmerzen gehabt</label>
-    <InputSelect id="headache" @bind-Value="day.Headache">
-        @for (int x = 1; x <= 10; x++)
-        {
-            <option value="@x">@x</option>
-        }
-    </InputSelect>
-    <br/>                          
-    <label for="drugs">Welche Medikamente haben sie genommen?</label>
-    <InputText @bind-Value="day.Drug" />
-    <br/>
+<EditForm Model="@day" OnValidSubmit="@HandleValidSubmit" class="custom-form">
+    <div class="form-group">    
+        <label for="date">Datum</label>
+        <InputDate id="date" @bind-Value="day.Date" />
+    </div>
+    <div class="form-group">
+        <label for="sleep">Wie haben sie geschlafen?</label>
+        <InputSelect id="sleep" @bind-Value="day.QualityOfSleep">
+            @for (int x = 1; x <= 10; x++)
+            {
+                <option value="@x">@x</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">    
+        <label for="sport">Wie viel Sport haben sie gemacht?</label>
+        <InputSelect id="sport" @bind-Value="day.Sport">
+            @for (int x = 1; x <= 10; x++)
+            {
+                <option value="@x">@x</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">       
+        <label for="sex">Haben sie Sex gehabt?</label>
+        <InputSelect id="sex" @bind-Value="day.Sex">
+            @for (int x = 1; x <= 10; x++)
+            {
+                <option value="@x">@x</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">      
+        <label for="alcohol">Haben sie Alkohol getrunken?</label>
+        <InputSelect id="alcohol" @bind-Value="day.Alcohol">
+            @for (int x = 1; x <= 10; x++)
+            {
+                <option value="@x">@x</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">      
+        <label for="headache">Haben sie Kopfschmerzen gehabt</label>
+        <InputSelect id="headache" @bind-Value="day.Headache">
+            @for (int x = 1; x <= 10; x++)
+            {
+                <option value="@x">@x</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">                              
+        <label for="drugs">Welche Medikamente haben sie genommen?</label>
+        <InputText @bind-Value="day.Drug" />
+    </div>
     <button type="submit">Submit</button>
 </EditForm>
 
