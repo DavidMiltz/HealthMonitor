@@ -1,0 +1,87 @@
+﻿@using Days;
+
+@page "/"
+
+<h1>Overview</h1>
+
+<p>An folgenden Tagen hatten Sie Kopfschmerzen:</p>
+<ul>
+    @foreach (var day in triggeredDays)
+    {
+        <li>
+            @day.Date.ToString("dd. MMM, yyyy")
+            <br>                                   
+        </li>
+    }
+</ul>
+
+<p>Folgende Trigger konnten identifiziert werden:</p>
+<ul>
+    <li>An @daysWithBadSleep.Count Tagen haben sie schlecht geschlafen</li>
+    <li>An @daysWithSport.Count Tagen haben sie Sport getrieben</li>
+    <li>An @daysWithSex.Count Tagen haben sie Sex gehabt</li>
+    <li>An @daysWithAlcohol.Count Tagen haben sie Alkohol getrunken</li>
+    <li>An @daysWithMedicament.Count Tagen haben sie Medikamente genommen</li>
+    <ul>
+    @foreach (var day in daysWithMedicament)
+    {
+        <li>
+            @day.Drug
+            <br>                                   
+        </li>
+    }
+</ul>
+</ul>
+
+
+@code {
+    private Day today = new() {};
+    private List<Day> daysFromDisk = new();
+    private List<Day> triggeredDays = new();
+    private List<Day> daysWithBadSleep = new();
+    private List<Day> daysWithSport = new();
+    private List<Day> daysWithSex = new();
+    private List<Day> daysWithAlcohol = new();
+    private List<Day> daysWithMedicament = new();
+
+    Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
+
+    protected override void OnInitialized()
+    {
+        daysFromDisk = getFiles.ObjectsFromFile();
+        today.Date = DateTime.Now;
+
+        foreach(Day day in daysFromDisk){
+            if( day.Headache > 0 ) {
+                triggeredDays.Add(day);
+            }
+        }
+
+        foreach(Day day in triggeredDays){
+            if( day.QualityOfSleep < 5 ) {
+                daysWithBadSleep.Add(day);
+            }
+        }
+        foreach(Day day in triggeredDays){
+            if( day.Sport > 2 ) {
+                daysWithSport.Add(day);
+            }
+        }                  
+        foreach(Day day in triggeredDays){
+            if( day.Sex > 2 ) {
+                daysWithSex.Add(day);
+            }
+        }                  
+        foreach(Day day in triggeredDays){
+            if( day.Alcohol > 1 ) {
+                daysWithAlcohol.Add(day);
+            }
+        }                  
+        foreach(Day day in triggeredDays){
+            if( day.Drug != null ) {
+                daysWithMedicament.Add(day);
+            }
+        }
+
+    }
+}

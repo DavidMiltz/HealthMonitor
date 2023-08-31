@@ -10,7 +10,7 @@
     <div class="form-group">
         <label for="sleep">Wie haben sie geschlafen?</label>
         <InputSelect id="sleep" @bind-Value="day.QualityOfSleep">
-            @for (int x = 1; x <= 10; x++)
+            @for (int x = 0; x <= 10; x++)
             {
                 <option value="@x">@x</option>
             }
@@ -19,7 +19,7 @@
     <div class="form-group">    
         <label for="sport">Wie viel Sport haben sie gemacht?</label>
         <InputSelect id="sport" @bind-Value="day.Sport">
-            @for (int x = 1; x <= 10; x++)
+            @for (int x = 0; x <= 10; x++)
             {
                 <option value="@x">@x</option>
             }
@@ -28,7 +28,7 @@
     <div class="form-group">       
         <label for="sex">Haben sie Sex gehabt?</label>
         <InputSelect id="sex" @bind-Value="day.Sex">
-            @for (int x = 1; x <= 10; x++)
+            @for (int x = 0; x <= 10; x++)
             {
                 <option value="@x">@x</option>
             }
@@ -37,7 +37,7 @@
     <div class="form-group">      
         <label for="alcohol">Haben sie Alkohol getrunken?</label>
         <InputSelect id="alcohol" @bind-Value="day.Alcohol">
-            @for (int x = 1; x <= 10; x++)
+            @for (int x = 0; x <= 10; x++)
             {
                 <option value="@x">@x</option>
             }
@@ -46,7 +46,7 @@
     <div class="form-group">      
         <label for="headache">Haben sie Kopfschmerzen gehabt</label>
         <InputSelect id="headache" @bind-Value="day.Headache">
-            @for (int x = 1; x <= 10; x++)
+            @for (int x = 0; x <= 10; x++)
             {
                 <option value="@x">@x</option>
             }
@@ -58,27 +58,6 @@
     </div>
     <button type="submit">Submit</button>
 </EditForm>
-
-<hr>
-
-@foreach (var testdays in daysFromDisk)
-{
-    <li>
-        @testdays.Date
-        <br>
-        @testdays.QualityOfSleep
-        <br>
-        @testdays.Drug
-        <br>
-        @testdays.Sport
-        <br>
-        @testdays.Sex
-        <br>
-        @testdays.Alcohol      
-        <br>
-        @testdays.Headache                                      
-    </li>
-}
 
 @code {
     private Day day = new() {};
