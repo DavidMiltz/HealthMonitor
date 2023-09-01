@@ -1,4 +1,8 @@
 ﻿@using Days;
+@using System;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Text.RegularExpressions;
 
 @page "/"
 
@@ -6,23 +10,30 @@
 
 <p>An folgenden Tagen hatten Sie Kopfschmerzen:</p>
 <ul>
-    @foreach (var day in triggeredDays)
+    @foreach (var day in daysWithHeadache)
     {
+        if(day.Headache>0){
         <li>
             @day.Date.ToString("dd. MMM, yyyy")
             <br>                                   
-        </li>
+            Kopfschmerzintensität: @day.Headache
+            <br>                                   
+        </li>        
+        }
     }
 </ul>
 
-<p>Folgende Trigger konnten identifiziert werden:</p>
+<p>Folgende potentielle Kopfschmerztrigger konnten an den Tagen an den Sie Kopfschmerzen hatten oder den Tagen direkt davor identifiziert werden:</p>
 <ul>
-    <li>An @daysWithBadSleep.Count Tagen haben sie schlecht geschlafen</li>
-    <li>An @daysWithSport.Count Tagen haben sie Sport getrieben</li>
-    <li>An @daysWithSex.Count Tagen haben sie Sex gehabt</li>
-    <li>An @daysWithAlcohol.Count Tagen haben sie Alkohol getrunken</li>
-    <li>An @daysWithMedicament.Count Tagen haben sie Medikamente genommen</li>
-    <ul>
+    @foreach (var item in @printResults())
+    {
+            @item
+            <br>                                   
+    }  
+</ul>  
+
+<p>An @daysWithMedicament.Count Tagen haben sie Medikamente genommen</p>
+<ul>
     @foreach (var day in daysWithMedicament)
     {
         <li>
@@ -31,18 +42,20 @@
         </li>
     }
 </ul>
-</ul>
 
 
 @code {
     private Day today = new() {};
     private List<Day> daysFromDisk = new();
-    private List<Day> triggeredDays = new();
+    private List<Day> daysWithHeadache = new();
+    private List<Day> daysBeforeHeadache = new();
     private List<Day> daysWithBadSleep = new();
     private List<Day> daysWithSport = new();
     private List<Day> daysWithSex = new();
     private List<Day> daysWithAlcohol = new();
     private List<Day> daysWithMedicament = new();
+
+    private Day previousDay = new() {};
 
     Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
 
@@ -53,35 +66,70 @@
 
         foreach(Day day in daysFromDisk){
             if( day.Headache > 0 ) {
-                triggeredDays.Add(day);
+                daysWithHeadache.Add(day);
+                if(previousDay != null){
+                    daysBeforeHeadache.Add(previousDay);
+                }
             }
+            previousDay = day;
         }
 
-        foreach(Day day in triggeredDays){
+        foreach(Day day in daysWithHeadache){
             if( day.QualityOfSleep < 5 ) {
-                daysWithBadSleep.Add(day);
+                daysWithBadSleep.Add(day);             
             }
         }
-        foreach(Day day in triggeredDays){
+        foreach(Day day in daysWithHeadache){
+            if( day.QualityOfSleep < 5 ) {
+                daysWithBadSleep.Add(day);             
+            }
+        }        
+        foreach(Day day in daysBeforeHeadache){
+            if( day.QualityOfSleep < 5 ) {
+                daysWithBadSleep.Add(day);             
+            }
+        }        
+
+        foreach(Day day in daysWithHeadache){
             if( day.Sport > 2 ) {
-                daysWithSport.Add(day);
+                daysWithSport.Add(day);                 
             }
         }                  
-        foreach(Day day in triggeredDays){
-            if( day.Sex > 2 ) {
-                daysWithSex.Add(day);
+        foreach(Day day in daysWithHeadache){
+            if( day.Sex > 0 ) {
+                daysWithSex.Add(day);                   
             }
-        }                  
-        foreach(Day day in triggeredDays){
+        } 
+        foreach(Day day in daysBeforeHeadache){
+            if( day.Sex > 0 ) {
+                daysWithSex.Add(day);                   
+            }
+        }                           
+        foreach(Day day in daysWithHeadache){
             if( day.Alcohol > 1 ) {
-                daysWithAlcohol.Add(day);
+                daysWithAlcohol.Add(day);                   
             }
         }                  
-        foreach(Day day in triggeredDays){
+        foreach(Day day in daysWithHeadache){
             if( day.Drug != null ) {
-                daysWithMedicament.Add(day);
+                daysWithMedicament.Add(day);                   
             }
         }
 
+    }
+    protected List<string> printResults()
+    {
+        List<string> items = new List<string>
+        {
+            "An " + daysWithBadSleep.Count + " Tagen haben sie schlecht geschlafen",
+            "An " + daysWithSport.Count + " Tagen haben sie Sport getrieben",
+            "An " + daysWithSex.Count + " Tagen haben sie Sex gehabt",
+            "An " + daysWithAlcohol.Count + " Tagen haben sie Alkohol getrunken",
+        };
+
+        // Use regular expression to extract the count numbers
+        var regex = new Regex(@"An (\d+) Tagen");
+        var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
+        return sortedItems;
     }
 }
