@@ -8,47 +8,53 @@
 
 @page "/"
 
-<h1>Overview</h1>
-
-<p>An folgenden Tagen hatten Sie Kopfschmerzen:</p>
-<ul>
-    @foreach (var day in daysWithHeadache)
-    {
-        if(day.Headache>0){
-        <li>
-            @day.Date.ToString("dd. MMM, yyyy")
-            <br>                                   
-            Kopfschmerzintensität: @day.Headache
-            <br>                                   
-        </li>        
-        }
-    }
-</ul>
-
-<p>Folgende potentielle Kopfschmerztrigger konnten an den Tagen an den Sie Kopfschmerzen hatten oder den Tagen direkt davor identifiziert werden:</p>
-<ul>
-    @foreach (var item in @printResults())
-    {
-            @item
-            <br>                                   
-    }  
-</ul>  
-
-<p>An @daysWithMedicament.Count Tagen haben sie Medikamente genommen</p>
-<ul>
-    @foreach (var day in daysWithMedicament)
-    {
-        <li>
-            @day.Drug
-            <br>                                   
-        </li>
-    }
-</ul>
-<RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
-    TextProperty="Text" SelectedIndex="1"
-    SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender>
+<h1>Overview and Statistics</h1>
+<br/>
+<RadzenAccordion>
+    <Items>
+        <RadzenAccordionItem Text="You had a headache on the following days:" Icon="accessibility">
+            <ul>
+                @foreach (var day in daysWithHeadache)
+                {
+                    if(day.Headache>0){
+                    <li>
+                        @day.Date.ToString("dd. MMM, yyyy")
+                        <br>                                   
+                        Intensity of headache: @day.Headache
+                        <br>                                   
+                    </li>        
+                    }
+                }
+            </ul>
+        </RadzenAccordionItem>
+        <RadzenAccordionItem Text="The following potential triggers could be identified:" Icon="accessibility">
+            <ul>
+                @foreach (var item in @printResults())
+                {
+                        @item
+                        <br>                                   
+                }  
+            </ul>  
+        </RadzenAccordionItem>
+        <RadzenAccordionItem Text="drug usage" Icon="accessibility">
+            <p>On @daysWithMedicament.Count days you took the following drugs</p>
+            <ul>
+                @foreach (var day in daysWithMedicament)
+                {
+                    <li>
+                        @day.Drug
+                        <br>                                   
+                    </li>
+                }
+            </ul>
+        </RadzenAccordionItem>
+    </Items>
+</RadzenAccordion>
+<br/>
+<RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="Headache" Data=@daysWithHeadacheList StartProperty="Start" EndProperty="End"
+    TextProperty="Text" SelectedIndex="1">
     <RadzenMonthView />
-    <RadzenYearPlannerView />
+    <RadzenYearView />
 </RadzenScheduler>
 
 @code {
@@ -63,64 +69,10 @@
     private List<Day> daysWithMedicament = new();
     private Day previousDay = new() {};
 
-    RadzenScheduler<Appointment> scheduler;
+    RadzenScheduler<Headache> scheduler;
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
 
-    IList<Appointment> appointments = new List<Appointment>
-    {
-        new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
-        new Appointment { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
-        new Appointment { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
-        new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
-        new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
-    };
-
-    void OnSlotRender(SchedulerSlotRenderEventArgs args)
-    {
-        // Highlight today in month view
-        if (args.View.Text == "Month" && args.Start.Date == DateTime.Today)
-        {
-            args.Attributes["style"] = "background: rgba(255,220,40,.2);";
-        }
-
-        // Highlight working hours (9-18)
-        if ((args.View.Text == "Week" || args.View.Text == "Day") && args.Start.Hour > 8 && args.Start.Hour < 19)
-        {
-            args.Attributes["style"] = "background: rgba(255,220,40,.2);";
-        }
-    }
-
-    async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
-    {
-        Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
-            new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End } });
-
-        if (data != null)
-        {
-            appointments.Add(data);
-            // Either call the Reload method or reassign the Data property of the Scheduler
-            await scheduler.Reload();
-        }
-    }
-
-    async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
-    {
-        await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", args.Data } });
-
-        await scheduler.Reload();
-    }
-
-    void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
-    {
-        // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
-
-        if (args.Data.Text == "Birthday")
-        {
-            args.Attributes["style"] = "background: red";
-        }
-    }
+    IList<Headache> daysWithHeadacheList = new List<Headache>{};
 
     Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
 
@@ -181,19 +133,25 @@
             }
         }
 
+        foreach(Day day in daysWithHeadache){
+            daysWithHeadacheList.Add(
+                new Headache { Start = day.Date, End = day.Date, Text = "Headache" }
+            );
+        }
+
     }
     protected List<string> printResults()
     {
         List<string> items = new List<string>
         {
-            "An " + daysWithBadSleep.Count + " Tagen haben sie schlecht geschlafen",
-            "An " + daysWithSport.Count + " Tagen haben sie Sport getrieben",
-            "An " + daysWithSex.Count + " Tagen haben sie Sex gehabt",
-            "An " + daysWithAlcohol.Count + " Tagen haben sie Alkohol getrunken",
+            "You had a bad sleep on " + daysWithBadSleep.Count + " days",
+            "You did sport on " + daysWithSport.Count + " days",
+            "You were sexual active on " + daysWithSex.Count + " days",
+            "You drank alcohol on " + daysWithAlcohol.Count + " days",
         };
 
         // Use regular expression to extract the count numbers
-        var regex = new Regex(@"An (\d+) Tagen");
+        var regex = new Regex(@"on (\d+) days");
         var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
         return sortedItems;
     }

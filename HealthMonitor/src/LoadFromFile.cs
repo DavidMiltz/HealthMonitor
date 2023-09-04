@@ -12,7 +12,6 @@ namespace Persistence
             foreach (var file in files)
             {
                 string jsonString = File.ReadAllText(file);
-                Console.WriteLine(jsonString);
                 Day day = JsonSerializer.Deserialize<Day>(jsonString)!;
                 daysFromDisk.Add(day);
             }
