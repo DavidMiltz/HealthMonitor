@@ -26,8 +26,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\TodoList.csproj": {
-                "projectPath": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\TodoList.csproj"
+              "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\HealthMonitor.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\HealthMonitor.csproj"
               }
             }
           }
@@ -83,12 +83,12 @@
         }
       }
     },
-    "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\TodoList.csproj": {
+    "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\HealthMonitor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\TodoList.csproj",
-        "projectName": "TodoList",
-        "projectPath": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\TodoList.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\HealthMonitor.csproj",
+        "projectName": "HealthMonitor",
+        "projectPath": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\HealthMonitor.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\obj\\",
         "projectStyle": "PackageReference",

@@ -69,7 +69,7 @@
     private List<Day> daysWithMedicament = new();
     private Day previousDay = new() {};
 
-    RadzenScheduler<Headache> scheduler;
+    RadzenScheduler<Headache>? scheduler;
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
 
     IList<Headache> daysWithHeadacheList = new List<Headache>{};
