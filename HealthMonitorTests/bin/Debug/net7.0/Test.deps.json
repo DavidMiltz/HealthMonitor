@@ -9,7 +9,7 @@
       "Test/1.0.0": {
         "dependencies": {
           "Microsoft.NET.Test.Sdk": "17.5.0",
-          "TodoList": "1.0.0",
+          "HealthMonitor": "1.0.0",
           "coverlet.collector": "3.2.0",
           "xunit": "2.4.2",
           "xunit.runner.visualstudio": "2.4.5"
@@ -1021,9 +1021,9 @@
         }
       },
       "xunit.runner.visualstudio/2.4.5": {},
-      "TodoList/1.0.0": {
+      "HealthMonitor/1.0.0": {
         "runtime": {
-          "TodoList.dll": {}
+          "HealthMonitor.dll": {}
         }
       }
     }
@@ -1657,7 +1657,7 @@
       "path": "xunit.runner.visualstudio/2.4.5",
       "hashPath": "xunit.runner.visualstudio.2.4.5.nupkg.sha512"
     },
-    "TodoList/1.0.0": {
+    "HealthMonitor/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

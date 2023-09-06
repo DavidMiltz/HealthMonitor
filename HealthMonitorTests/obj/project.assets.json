@@ -1713,14 +1713,14 @@
           "build/netcoreapp3.1/xunit.runner.visualstudio.props": {}
         }
       },
-      "TodoList/1.0.0": {
+      "HealthMonitor/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "compile": {
-          "bin/placeholder/TodoList.dll": {}
+          "bin/placeholder/HealthMonitor.dll": {}
         },
         "runtime": {
-          "bin/placeholder/TodoList.dll": {}
+          "bin/placeholder/HealthMonitor.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
@@ -5520,16 +5520,16 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "TodoList/1.0.0": {
+    "HealthMonitor/1.0.0": {
       "type": "project",
-      "path": "../HealthMonitor/TodoList.csproj",
-      "msbuildProject": "../HealthMonitor/TodoList.csproj"
+      "path": "../HealthMonitor/HealthMonitor.csproj",
+      "msbuildProject": "../HealthMonitor/HealthMonitor.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
       "Microsoft.NET.Test.Sdk >= 17.5.0",
-      "TodoList >= 1.0.0",
+      "HealthMonitor >= 1.0.0",
       "coverlet.collector >= 3.2.0",
       "xunit >= 2.4.2",
       "xunit.runner.visualstudio >= 2.4.5"
@@ -5560,8 +5560,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\TodoList.csproj": {
-              "projectPath": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\TodoList.csproj"
+            "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\HealthMonitor.csproj": {
+              "projectPath": "C:\\Users\\User\\Desktop\\C#Project\\HealthMonitor\\HealthMonitor.csproj"
             }
           }
         }

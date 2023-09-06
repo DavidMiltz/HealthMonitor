@@ -1,4 +1,4 @@
 {
-    "dotnet.defaultSolution": "HealthMonitor\\TodoList.sln",
+    "dotnet.defaultSolution": "HealthMonitor\\HealthMonitor.sln",
     "editor.tabCompletion": "on",
 }

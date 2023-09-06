@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HealthMonitor\TodoList.csproj" />
+    <ProjectReference Include="..\HealthMonitor\HealthMonitor.csproj" />
   </ItemGroup>
 
 </Project>
