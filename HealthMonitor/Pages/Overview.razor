@@ -12,15 +12,15 @@
 <br/>
 <RadzenAccordion>
     <Items>
-        <RadzenAccordionItem Text="You had a headache on the following days:" Icon="accessibility">
+        <RadzenAccordionItem Text="You had low health on the following days:" Icon="accessibility">
             <ul>
-                @foreach (var day in daysWithHeadache)
+                @foreach (var day in daysWithLowHealth)
                 {
-                    if(day.Headache>0){
+                    if(day.HealthStatus<5){
                     <li>
                         @day.Date.ToString("dd. MMM, yyyy")
                         <br>                                   
-                        Intensity of headache: @day.Headache
+                        Health status: @day.HealthStatus
                         <br>                                   
                     </li>        
                     }
@@ -37,9 +37,9 @@
             </ul>  
         </RadzenAccordionItem>
         <RadzenAccordionItem Text="drug usage" Icon="accessibility">
-            <p>On @daysWithMedicament.Count days you took the following drugs</p>
+            <p>On @daysWithDrugUsage.Count days you took the following drugs</p>
             <ul>
-                @foreach (var day in daysWithMedicament)
+                @foreach (var day in daysWithDrugUsage)
                 {
                     <li>
                         @day.Drug
@@ -51,7 +51,7 @@
     </Items>
 </RadzenAccordion>
 <br/>
-<RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="Headache" Data=@daysWithHeadacheList StartProperty="Start" EndProperty="End"
+<RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="DailyHealthStatus" Data=@daysWithLowHealthList StartProperty="Start" EndProperty="End"
     TextProperty="Text" SelectedIndex="1">
     <RadzenMonthView />
     <RadzenYearView />
@@ -60,30 +60,30 @@
 @code {
     private Day today = new() {};
     private List<Day> daysFromDisk = new();
-    private List<Day> daysWithHeadache = new();
+    private List<Day> daysWithLowHealth = new();
     private List<Day> daysBeforeHeadache = new();
     private List<Day> daysWithBadSleep = new();
     private List<Day> daysWithSport = new();
     private List<Day> daysWithSex = new();
     private List<Day> daysWithAlcohol = new();
-    private List<Day> daysWithMedicament = new();
+    private List<Day> daysWithDrugUsage = new();
     private Day previousDay = new() {};
 
-    RadzenScheduler<Headache>? scheduler;
+    RadzenScheduler<DailyHealthStatus>? scheduler;
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
 
-    IList<Headache> daysWithHeadacheList = new List<Headache>{};
+    IList<DailyHealthStatus> daysWithLowHealthList = new List<DailyHealthStatus>{};
 
-    Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
+    Persistence.FileLoader fileLoader = new Persistence.FileLoader();
 
     protected override void OnInitialized()
     {
-        daysFromDisk = getFiles.ObjectsFromFile();
+        daysFromDisk = fileLoader.ObjectsFromFile();
         today.Date = DateTime.Now;
 
         foreach(Day day in daysFromDisk){
-            if( day.Headache > 0 ) {
-                daysWithHeadache.Add(day);
+            if( day.HealthStatus < 5 ) {
+                daysWithLowHealth.Add(day);
                 if(previousDay != null){
                     daysBeforeHeadache.Add(previousDay);
                 }
@@ -91,12 +91,12 @@
             previousDay = day;
         }
 
-        foreach(Day day in daysWithHeadache){
+        foreach(Day day in daysWithLowHealth){
             if( day.QualityOfSleep < 5 ) {
                 daysWithBadSleep.Add(day);             
             }
         }
-        foreach(Day day in daysWithHeadache){
+        foreach(Day day in daysWithLowHealth){
             if( day.QualityOfSleep < 5 ) {
                 daysWithBadSleep.Add(day);             
             }
@@ -107,12 +107,12 @@
             }
         }        
 
-        foreach(Day day in daysWithHeadache){
+        foreach(Day day in daysWithLowHealth){
             if( day.Sport > 2 ) {
                 daysWithSport.Add(day);                 
             }
         }                  
-        foreach(Day day in daysWithHeadache){
+        foreach(Day day in daysWithLowHealth){
             if( day.Sex > 0 ) {
                 daysWithSex.Add(day);                   
             }
@@ -122,20 +122,20 @@
                 daysWithSex.Add(day);                   
             }
         }                           
-        foreach(Day day in daysWithHeadache){
+        foreach(Day day in daysWithLowHealth){
             if( day.Alcohol > 1 ) {
                 daysWithAlcohol.Add(day);                   
             }
         }                  
-        foreach(Day day in daysWithHeadache){
+        foreach(Day day in daysWithLowHealth){
             if( day.Drug != null ) {
-                daysWithMedicament.Add(day);                   
+                daysWithDrugUsage.Add(day);                   
             }
         }
 
-        foreach(Day day in daysWithHeadache){
-            daysWithHeadacheList.Add(
-                new Headache { Start = day.Date, End = day.Date, Text = "Headache" }
+        foreach(Day day in daysWithLowHealth){
+            daysWithLowHealthList.Add(
+                new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.HealthStatus }
             );
         }
 
@@ -144,10 +144,10 @@
     {
         List<string> items = new List<string>
         {
-            "You had a bad sleep on " + daysWithBadSleep.Count + " days",
-            "You did sport on " + daysWithSport.Count + " days",
-            "You were sexual active on " + daysWithSex.Count + " days",
-            "You drank alcohol on " + daysWithAlcohol.Count + " days",
+            "You had a bad sleep on " + daysWithBadSleep.Count + " days with low health",
+            "You did sport on " + daysWithSport.Count + " days with low health",
+            "You were sexual active on " + daysWithSex.Count + " days with low health",
+            "You drank alcohol on " + daysWithAlcohol.Count + " days with low health",
         };
 
         // Use regular expression to extract the count numbers

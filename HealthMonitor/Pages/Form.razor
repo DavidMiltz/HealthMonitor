@@ -4,11 +4,11 @@
 
 <EditForm Model="@day" OnValidSubmit="@HandleValidSubmit" class="custom-form">
     <div class="form-group">    
-        <label for="date">Datum</label>
+        <label for="date">Date</label>
         <InputDate id="date" @bind-Value="day.Date" />
     </div>
     <div class="form-group">
-        <label for="sleep">Wie haben sie geschlafen?</label>
+        <label for="sleep">How was your sleep?</label>
         <InputSelect id="sleep" @bind-Value="day.QualityOfSleep">
             @for (int x = 0; x <= 10; x++)
             {
@@ -17,7 +17,7 @@
         </InputSelect>
     </div>
     <div class="form-group">    
-        <label for="sport">Wie viel Sport haben sie gemacht?</label>
+        <label for="sport">How much sport did you do?</label>
         <InputSelect id="sport" @bind-Value="day.Sport">
             @for (int x = 0; x <= 10; x++)
             {
@@ -26,7 +26,7 @@
         </InputSelect>
     </div>
     <div class="form-group">       
-        <label for="sex">Haben sie Sex gehabt?</label>
+        <label for="sex">Sexual activity?</label>
         <InputSelect id="sex" @bind-Value="day.Sex">
             @for (int x = 0; x <= 10; x++)
             {
@@ -35,7 +35,7 @@
         </InputSelect>
     </div>
     <div class="form-group">      
-        <label for="alcohol">Haben sie Alkohol getrunken?</label>
+        <label for="alcohol">Did you drank alcohol?</label>
         <InputSelect id="alcohol" @bind-Value="day.Alcohol">
             @for (int x = 0; x <= 10; x++)
             {
@@ -44,8 +44,8 @@
         </InputSelect>
     </div>
     <div class="form-group">      
-        <label for="headache">Haben sie Kopfschmerzen gehabt</label>
-        <InputSelect id="headache" @bind-Value="day.Headache">
+        <label for="healthStatus">How did you feel today? 5 is average</label>
+        <InputSelect id="healthStatus" @bind-Value="day.HealthStatus">
             @for (int x = 0; x <= 10; x++)
             {
                 <option value="@x">@x</option>
@@ -53,7 +53,7 @@
         </InputSelect>
     </div>
     <div class="form-group">                              
-        <label for="drugs">Welche Medikamente haben sie genommen?</label>
+        <label for="drugs">Which drugs did you take?</label>
         <InputText @bind-Value="day.Drug" />
     </div>
     <button type="submit">Submit</button>
@@ -63,21 +63,21 @@
     private Day day = new() {};
     private List<Day> days = new();
     private List<Day> daysFromDisk = new();
-    Persistence.SaveToFile db = new Persistence.SaveToFile();
-    Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
+    Persistence.FileSaver fileSaver = new Persistence.FileSaver();
+    Persistence.FileLoader fileLoader = new Persistence.FileLoader();
 
     protected override void OnInitialized()
     {
-        daysFromDisk = getFiles.ObjectsFromFile();
+        daysFromDisk = fileLoader.ObjectsFromFile();
         day.Date = DateTime.Now;
     }
 
-        private void HandleValidSubmit()
+    private void HandleValidSubmit()
+    {
+        if (day is not null )
         {
-            if (day is not null )
-            {
-                days.Add(day);
-                db.ObjectToFile( day, day.Date );
-            }
+            days.Add(day);
+            fileSaver.SaveDayToFileOnDisk( day, day.Date );
         }
+    }
 }
