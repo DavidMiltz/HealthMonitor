@@ -2,9 +2,14 @@ namespace Days
 {
     public class Day
     {
+        public Day()
+        {
+            City = "Munich";
+        }
         public DateTime Date  { get; set; }
 
         public string? Drug { get; set; }
+        public string City  { get; set; }
 
         public int QualityOfSleep { get; set; }
 
@@ -15,6 +20,6 @@ namespace Days
         public int Sex { get; set; }
 
         public int Alcohol { get; set; }
-        public double? AirPressure { get; set; }        
+        public int AirPressure { get; set; }        
     }
 }

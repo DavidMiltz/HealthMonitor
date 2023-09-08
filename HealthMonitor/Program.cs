@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Radzen;
+using WeatherApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddRadzenComponents();
+
+var weatherApiBaseUrl = builder.Configuration["WeatherApiBaseUrl"];
+
+if (!string.IsNullOrEmpty(weatherApiBaseUrl))
+{
+    builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(weatherApiBaseUrl) });
+}
+
+builder.Services.AddScoped<WeatherService>(); 
 
 var app = builder.Build();
 

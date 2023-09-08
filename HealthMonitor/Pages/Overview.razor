@@ -12,20 +12,8 @@
 <br/>
 <RadzenAccordion>
     <Items>
-        <RadzenAccordionItem Text="You had low health on the following days:" Icon="accessibility">
-            <ul>
-                @foreach (var day in daysWithLowHealth)
-                {
-                    if(day.HealthStatus<5){
-                    <li>
-                        @day.Date.ToString("dd. MMM, yyyy")
-                        <br>                                   
-                        Health status: @day.HealthStatus
-                        <br>                                   
-                    </li>        
-                    }
-                }
-            </ul>
+        <RadzenAccordionItem Text="The average airpressure on days with low health was:" Icon="accessibility">
+            @getAirpressureForTriggerDays()
         </RadzenAccordionItem>
         <RadzenAccordionItem Text="The following potential triggers could be identified:" Icon="accessibility">
             <ul>
@@ -61,7 +49,7 @@
     private Day today = new() {};
     private List<Day> daysFromDisk = new();
     private List<Day> daysWithLowHealth = new();
-    private List<Day> daysBeforeHeadache = new();
+    private List<Day> daysBeforeLowHealth = new();
     private List<Day> daysWithBadSleep = new();
     private List<Day> daysWithSport = new();
     private List<Day> daysWithSex = new();
@@ -85,7 +73,7 @@
             if( day.HealthStatus < 5 ) {
                 daysWithLowHealth.Add(day);
                 if(previousDay != null){
-                    daysBeforeHeadache.Add(previousDay);
+                    daysBeforeLowHealth.Add(previousDay);
                 }
             }
             previousDay = day;
@@ -96,42 +84,55 @@
                 daysWithBadSleep.Add(day);             
             }
         }
-        foreach(Day day in daysWithLowHealth){
+        foreach(Day day in daysBeforeLowHealth){
             if( day.QualityOfSleep < 5 ) {
                 daysWithBadSleep.Add(day);             
             }
-        }        
-        foreach(Day day in daysBeforeHeadache){
-            if( day.QualityOfSleep < 5 ) {
-                daysWithBadSleep.Add(day);             
-            }
-        }        
+        }  
 
         foreach(Day day in daysWithLowHealth){
-            if( day.Sport > 2 ) {
+            if( day.Sport < 5 ) {
+                daysWithBadSleep.Add(day);             
+            }
+        }        
+        foreach(Day day in daysBeforeLowHealth){
+            if( day.Sport > 0 ) {
                 daysWithSport.Add(day);                 
             }
-        }                  
+        }     
+
         foreach(Day day in daysWithLowHealth){
             if( day.Sex > 0 ) {
                 daysWithSex.Add(day);                   
             }
         } 
-        foreach(Day day in daysBeforeHeadache){
+        foreach(Day day in daysBeforeLowHealth){
             if( day.Sex > 0 ) {
                 daysWithSex.Add(day);                   
             }
-        }                           
+        }   
+
         foreach(Day day in daysWithLowHealth){
-            if( day.Alcohol > 1 ) {
+            if( day.Alcohol > 0 ) {
                 daysWithAlcohol.Add(day);                   
             }
-        }                  
+        } 
+        foreach(Day day in daysBeforeLowHealth){
+            if( day.Alcohol > 0 ) {
+                daysWithAlcohol.Add(day);                   
+            }
+        }   
+
         foreach(Day day in daysWithLowHealth){
             if( day.Drug != null ) {
                 daysWithDrugUsage.Add(day);                   
             }
         }
+        foreach(Day day in daysBeforeLowHealth){
+            if( day.Drug != null ) {
+                daysWithDrugUsage.Add(day);                   
+            }
+        }        
 
         foreach(Day day in daysWithLowHealth){
             daysWithLowHealthList.Add(
@@ -155,4 +156,14 @@
         var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
         return sortedItems;
     }
+
+    protected int getAirpressureForTriggerDays()
+    {
+        int sumAirpressure = 0;
+
+        foreach(Day day in daysWithLowHealth){
+            sumAirpressure = sumAirpressure + day.AirPressure; 
+        }
+        return sumAirpressure / daysWithLowHealth.Count;
+    }    
 }

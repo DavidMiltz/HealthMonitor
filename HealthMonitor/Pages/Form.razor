@@ -1,4 +1,7 @@
 ﻿@using Days;
+@using WeatherApi;
+
+@inject WeatherService weatherService;
 
 @page "/day"
 
@@ -56,6 +59,10 @@
         <label for="drugs">Which drugs did you take?</label>
         <InputText @bind-Value="day.Drug" />
     </div>
+    <div class="form-group">                              
+        <label for="drugs">In which city do you live?</label>
+        <InputText @bind-Value="day.City" />
+    </div>    
     <button type="submit">Submit</button>
 </EditForm>
 
@@ -65,17 +72,32 @@
     private List<Day> daysFromDisk = new();
     Persistence.FileSaver fileSaver = new Persistence.FileSaver();
     Persistence.FileLoader fileLoader = new Persistence.FileLoader();
+    private int airPressure;
 
     protected override void OnInitialized()
     {
         daysFromDisk = fileLoader.ObjectsFromFile();
         day.Date = DateTime.Now;
+        airPressure = 0;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            airPressure =  await weatherService.GetAirPressureAsync("Munich");
+        }
+        catch (Exception ex)
+        {
+            // Handle API call errors here (e.g., network issues, API rate limits, etc.)
+            Console.WriteLine(ex.Message);
+        }
     }
 
     private void HandleValidSubmit()
     {
         if (day is not null )
         {
+            day.AirPressure = airPressure;
             days.Add(day);
             fileSaver.SaveDayToFileOnDisk( day, day.Date );
         }
