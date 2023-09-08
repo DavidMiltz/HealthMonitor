@@ -2,7 +2,7 @@ using System;
 
 namespace RadzenBlazorDemos
 {
-    public class Headache
+    public class DailyHealthStatus
     {
         public DateTime Start { get; set; }
         public DateTime End { get; set; }

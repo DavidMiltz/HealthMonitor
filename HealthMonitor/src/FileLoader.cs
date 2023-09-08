@@ -3,7 +3,7 @@ using Days;
 
 namespace Persistence
 {
-    public class LoadFromFile {
+    public class FileLoader {
         public List<Day> ObjectsFromFile()
         {
             var path = "DataBase\\"; 
