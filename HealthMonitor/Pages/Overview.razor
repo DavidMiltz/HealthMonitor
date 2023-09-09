@@ -1,4 +1,5 @@
 ﻿@using Days;
+@using FileManagement;
 @using System;
 @using System.Collections.Generic;
 @using System.Linq;
@@ -13,11 +14,11 @@
 <RadzenAccordion>
     <Items>
         <RadzenAccordionItem Text="The average airpressure on days with low health was:" Icon="accessibility">
-            @getAirpressureForTriggerDays()
+            @getAverageAirpressure()
         </RadzenAccordionItem>
         <RadzenAccordionItem Text="The following potential triggers could be identified:" Icon="accessibility">
             <ul>
-                @foreach (var item in @printResults())
+                @foreach (var item in @printResultList())
                 {
                         @item
                         <br>                                   
@@ -36,6 +37,20 @@
                 }
             </ul>
         </RadzenAccordionItem>
+        @if(@daysWithFood.Count > 0) {
+            <RadzenAccordionItem Text="food" Icon="accessibility">
+                <p>On @daysWithFood.Count days you ate:</p>
+                <ul>
+                    @foreach (var day in daysWithFood)
+                    {
+                        <li>
+                            @day.Food
+                            <br>                                   
+                        </li>
+                    }
+                </ul>
+            </RadzenAccordionItem> 
+        }       
     </Items>
 </RadzenAccordion>
 <br/>
@@ -55,18 +70,18 @@
     private List<Day> daysWithSex = new();
     private List<Day> daysWithAlcohol = new();
     private List<Day> daysWithDrugUsage = new();
+    private List<Day> daysWithFood = new();
     private Day previousDay = new() {};
 
     RadzenScheduler<DailyHealthStatus>? scheduler;
-    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
 
     IList<DailyHealthStatus> daysWithLowHealthList = new List<DailyHealthStatus>{};
 
-    Persistence.FileLoader fileLoader = new Persistence.FileLoader();
+    FileLoaderService fileLoaderService = new FileLoaderService();
 
     protected override void OnInitialized()
     {
-        daysFromDisk = fileLoader.ObjectsFromFile();
+        daysFromDisk = fileLoaderService.LoadAllDays();
         today.Date = DateTime.Now;
 
         foreach(Day day in daysFromDisk){
@@ -131,9 +146,18 @@
         foreach(Day day in daysBeforeLowHealth){
             if( day.Drug != null ) {
                 daysWithDrugUsage.Add(day);                   
+            }  
+        } 
+        foreach(Day day in daysWithLowHealth){
+            if( day.Food != null ) {
+                daysWithFood.Add(day);                   
             }
-        }        
-
+        }
+        foreach(Day day in daysBeforeLowHealth){
+            if( day.Food != null ) {
+                daysWithFood.Add(day);                   
+            }               
+        }
         foreach(Day day in daysWithLowHealth){
             daysWithLowHealthList.Add(
                 new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.HealthStatus }
@@ -141,7 +165,7 @@
         }
 
     }
-    protected List<string> printResults()
+    protected List<string> printResultList()
     {
         List<string> items = new List<string>
         {
@@ -157,7 +181,7 @@
         return sortedItems;
     }
 
-    protected int getAirpressureForTriggerDays()
+    protected int getAverageAirpressure()
     {
         int sumAirpressure = 0;
 

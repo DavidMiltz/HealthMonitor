@@ -1,10 +1,10 @@
 using System.Text.Json;
 using Days;
 
-namespace Persistence
+namespace FileManagement
 {
-    public class FileLoader {
-        public List<Day> ObjectsFromFile()
+    public class FileLoaderService {
+        public List<Day> LoadAllDays()
         {
             var path = "DataBase\\"; 
             List<Day> daysFromDisk = new List<Day>();

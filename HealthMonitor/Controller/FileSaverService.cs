@@ -1,9 +1,9 @@
 using System.Text.Json;
 
-namespace Persistence
+namespace FileManagement
 {
-    public class FileSaver {
-        public bool SaveDayToFileOnDisk(object _Object, DateTime _FileName)
+    public class FileSaverService {
+        public bool SaveDay(object _Object, DateTime _FileName)
         {
             var path = "DataBase\\"; 
             string fileName = _FileName.ToString("yyyy-dd-M") + ".json"; 

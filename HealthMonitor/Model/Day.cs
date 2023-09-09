@@ -20,6 +20,8 @@ namespace Days
         public int Sex { get; set; }
 
         public int Alcohol { get; set; }
-        public int AirPressure { get; set; }        
+        public int AirPressure { get; set; }   
+        public string Comment { get; set; }       
+        public string? Food { get; set; }       
     }
 }

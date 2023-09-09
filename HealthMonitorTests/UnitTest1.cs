@@ -1,4 +1,4 @@
-using Persistence;
+using FileManagement;
 using Days;
 
 namespace Test;
@@ -6,12 +6,12 @@ namespace Test;
     public class UnitTest1
     {
             private List<Day> daysFromDisk = new();
-            Persistence.LoadFromFile getFiles = new Persistence.LoadFromFile();
+            FileManagement.LoadFromFile getFiles = new FileManagement.LoadFromFile();
 
         [Fact]
         public void PassingTest()
         {
-            daysFromDisk = getFiles.ObjectsFromFile();
+            daysFromDisk = getFiles.LoadAllDays();
         
             Assert.Equal(4, todosFromDisk.Count);
         }

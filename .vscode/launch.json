@@ -6,7 +6,7 @@
             "type": "blazorwasm",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "url": "https://localhost:5163" // Tell launch where to find site
+            "url": "https://localhost:5163"
         }
     ]
 }
