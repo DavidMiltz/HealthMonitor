@@ -12,7 +12,9 @@
 @page "/"
 
 <h1>Overview and Statistics</h1>
+
 <br/>
+
 <RadzenAccordion>
     <Items>
         <RadzenAccordionItem Text="The average airpressure on days with low health was:" Icon="accessibility">
@@ -42,7 +44,9 @@
         <HealthMonitor.Components.FoodSection daysWithFood="daysWithFood" />   
     </Items>
 </RadzenAccordion>
+
 <br/>
+
 <RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="DailyHealthStatus" Data=@daysWithLowHealthList StartProperty="Start" EndProperty="End"
     TextProperty="Text" SelectedIndex="1">
     <RadzenMonthView />
