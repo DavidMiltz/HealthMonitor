@@ -5,6 +5,8 @@
 @using System.Linq;
 @using System.Text.RegularExpressions;
 @using RadzenBlazorDemos;
+@using HealthMonitor.Components;
+
 @inject DialogService DialogService;
 
 @page "/"
@@ -36,21 +38,8 @@
                     </li>
                 }
             </ul>
-        </RadzenAccordionItem>
-        @if(@daysWithFood.Count > 0) {
-            <RadzenAccordionItem Text="food" Icon="accessibility">
-                <p>On @daysWithFood.Count days you ate:</p>
-                <ul>
-                    @foreach (var day in daysWithFood)
-                    {
-                        <li>
-                            @day.Food
-                            <br>                                   
-                        </li>
-                    }
-                </ul>
-            </RadzenAccordionItem> 
-        }       
+        </RadzenAccordionItem>  
+        <HealthMonitor.Components.FoodSection daysWithFood="daysWithFood" />   
     </Items>
 </RadzenAccordion>
 <br/>
@@ -61,8 +50,7 @@
 </RadzenScheduler>
 
 @code {
-    private Day today = new() {};
-    private List<Day> daysFromDisk = new();
+    private List<Day> allDays = new();
     private List<Day> daysWithLowHealth = new();
     private List<Day> daysBeforeLowHealth = new();
     private List<Day> daysWithBadSleep = new();
@@ -79,12 +67,11 @@
 
     FileLoaderService fileLoaderService = new FileLoaderService();
 
-    protected override void OnInitialized()
+    public Overview()
     {
-        daysFromDisk = fileLoaderService.LoadAllDays();
-        today.Date = DateTime.Now;
+        allDays = fileLoaderService.LoadAllDays();
 
-        foreach(Day day in daysFromDisk){
+        foreach(Day day in allDays){
             if( day.HealthStatus < 5 ) {
                 daysWithLowHealth.Add(day);
                 if(previousDay != null){
@@ -94,76 +81,43 @@
             previousDay = day;
         }
 
-        foreach(Day day in daysWithLowHealth){
-            if( day.QualityOfSleep < 5 ) {
-                daysWithBadSleep.Add(day);             
-            }
-        }
-        foreach(Day day in daysBeforeLowHealth){
-            if( day.QualityOfSleep < 5 ) {
-                daysWithBadSleep.Add(day);             
-            }
-        }  
+        Func<Day, bool> isBadSleepCondition = day => day.QualityOfSleep < 5;
+        Func<Day, bool> isSexCondition = day => day.Sex > 0;
+        Func<Day, bool> isSportCondition = day => day.Sport > 0;            
+        Func<Day, bool> isAlcoholCondition = day => day.Alcohol < 5;
+        Func<Day, bool> isDrugCondition = day => day.Drug != null;
+        Func<Day, bool> isFoodCondition = day => day.Food != null;
 
-        foreach(Day day in daysWithLowHealth){
-            if( day.Sport < 5 ) {
-                daysWithBadSleep.Add(day);             
-            }
-        }        
-        foreach(Day day in daysBeforeLowHealth){
-            if( day.Sport > 0 ) {
-                daysWithSport.Add(day);                 
-            }
-        }     
 
-        foreach(Day day in daysWithLowHealth){
-            if( day.Sex > 0 ) {
-                daysWithSex.Add(day);                   
-            }
-        } 
-        foreach(Day day in daysBeforeLowHealth){
-            if( day.Sex > 0 ) {
-                daysWithSex.Add(day);                   
-            }
-        }   
+        daysWithBadSleep = FilterDaysWithProperty(daysWithLowHealth, isBadSleepCondition);
+        daysWithBadSleep.AddRange(daysBeforeLowHealth.Where(isBadSleepCondition));
 
-        foreach(Day day in daysWithLowHealth){
-            if( day.Alcohol > 0 ) {
-                daysWithAlcohol.Add(day);                   
-            }
-        } 
-        foreach(Day day in daysBeforeLowHealth){
-            if( day.Alcohol > 0 ) {
-                daysWithAlcohol.Add(day);                   
-            }
-        }   
+        daysWithSport = FilterDaysWithProperty(daysWithLowHealth, isSportCondition);  
+        daysWithSport.AddRange(daysBeforeLowHealth.Where(isSportCondition)); 
 
-        foreach(Day day in daysWithLowHealth){
-            if( day.Drug != null ) {
-                daysWithDrugUsage.Add(day);                   
-            }
-        }
-        foreach(Day day in daysBeforeLowHealth){
-            if( day.Drug != null ) {
-                daysWithDrugUsage.Add(day);                   
-            }  
-        } 
-        foreach(Day day in daysWithLowHealth){
-            if( day.Food != null ) {
-                daysWithFood.Add(day);                   
-            }
-        }
-        foreach(Day day in daysBeforeLowHealth){
-            if( day.Food != null ) {
-                daysWithFood.Add(day);                   
-            }               
-        }
+        daysWithSex = FilterDaysWithProperty(daysWithLowHealth, isSexCondition);  
+        daysWithSex.AddRange(daysBeforeLowHealth.Where(isSexCondition)); 
+ 
+        daysWithAlcohol = FilterDaysWithProperty(daysWithLowHealth, isAlcoholCondition); 
+        daysWithAlcohol.AddRange(daysBeforeLowHealth.Where(isAlcoholCondition)); 
+
+        daysWithDrugUsage = FilterDaysWithProperty(daysWithLowHealth, isDrugCondition); 
+        daysWithDrugUsage.AddRange(daysBeforeLowHealth.Where(isDrugCondition)); 
+
+        daysWithFood = FilterDaysWithProperty(daysWithLowHealth, isFoodCondition); 
+        daysWithFood.AddRange(daysBeforeLowHealth.Where(isFoodCondition)); 
+
         foreach(Day day in daysWithLowHealth){
             daysWithLowHealthList.Add(
                 new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.HealthStatus }
             );
         }
 
+    }
+
+    private List<Day> FilterDaysWithProperty(List<Day> sourceDays, Func<Day, bool> filter)
+    {
+        return sourceDays.Where(filter).ToList();
     }
     protected List<string> printResultList()
     {

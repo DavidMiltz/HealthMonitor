@@ -5,6 +5,7 @@ namespace Days
         public Day()
         {
             City = "Munich";
+            Comment = "";
         }
         public DateTime Date  { get; set; }
 
