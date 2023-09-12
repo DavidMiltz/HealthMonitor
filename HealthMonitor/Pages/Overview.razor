@@ -1,11 +1,11 @@
 ﻿@using Days;
 @using FileManagement;
+@using HealthMonitor.Components;
 @using System;
 @using System.Collections.Generic;
 @using System.Linq;
 @using System.Text.RegularExpressions;
 @using RadzenBlazorDemos;
-@using HealthMonitor.Components;
 
 @inject DialogService DialogService;
 
@@ -17,9 +17,7 @@
 
 <RadzenAccordion>
     <Items>
-        <RadzenAccordionItem Text="The average airpressure on days with low health was:" Icon="accessibility">
-            @getAverageAirpressure()
-        </RadzenAccordionItem>
+        <HealthMonitor.Components.AirpressureSection daysWithLowHealth="daysWithLowHealth" />
         <RadzenAccordionItem Text="The following potential triggers could be identified:" Icon="accessibility">
             <ul>
                 @foreach (var item in @printResultList())
@@ -28,19 +26,8 @@
                         <br>                                   
                 }  
             </ul>  
-        </RadzenAccordionItem>
-        <RadzenAccordionItem Text="drug usage" Icon="accessibility">
-            <p>On @daysWithDrugUsage.Count days you took the following drugs</p>
-            <ul>
-                @foreach (var day in daysWithDrugUsage)
-                {
-                    <li>
-                        @day.Drug
-                        <br>                                   
-                    </li>
-                }
-            </ul>
-        </RadzenAccordionItem>  
+        </RadzenAccordionItem>          
+        <HealthMonitor.Components.DrugSection daysWithDrugUsage="daysWithDrugUsage" />  
         <HealthMonitor.Components.FoodSection daysWithFood="daysWithFood" />   
     </Items>
 </RadzenAccordion>
@@ -54,7 +41,7 @@
 </RadzenScheduler>
 
 @code {
-    private List<Day> allDays = new();
+    private List<Day> allDays;
     private List<Day> daysWithLowHealth = new();
     private List<Day> daysBeforeLowHealth = new();
     private List<Day> daysWithBadSleep = new();
@@ -73,7 +60,7 @@
 
     public Overview()
     {
-        allDays = fileLoaderService.LoadAllDays();
+        allDays = fileLoaderService.LoadAllDays();    
 
         foreach(Day day in allDays){
             if( day.HealthStatus < 5 ) {
@@ -88,11 +75,14 @@
         Func<Day, bool> isBadSleepCondition = day => day.QualityOfSleep < 5;
         Func<Day, bool> isSexCondition = day => day.Sex > 0;
         Func<Day, bool> isSportCondition = day => day.Sport > 0;            
-        Func<Day, bool> isAlcoholCondition = day => day.Alcohol < 5;
+        Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0;
         Func<Day, bool> isDrugCondition = day => day.Drug != null;
         Func<Day, bool> isFoodCondition = day => day.Food != null;
 
-
+        daysWithLowHealthList = daysWithLowHealth
+            .Select(day => new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.Comment })
+            .ToList();
+            
         daysWithBadSleep = FilterDaysWithProperty(daysWithLowHealth, isBadSleepCondition);
         daysWithBadSleep.AddRange(daysBeforeLowHealth.Where(isBadSleepCondition));
 
@@ -111,41 +101,26 @@
         daysWithFood = FilterDaysWithProperty(daysWithLowHealth, isFoodCondition); 
         daysWithFood.AddRange(daysBeforeLowHealth.Where(isFoodCondition)); 
 
-        foreach(Day day in daysWithLowHealth){
-            daysWithLowHealthList.Add(
-                new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.HealthStatus }
-            );
-        }
-
     }
 
     private List<Day> FilterDaysWithProperty(List<Day> sourceDays, Func<Day, bool> filter)
     {
         return sourceDays.Where(filter).ToList();
     }
+
     protected List<string> printResultList()
     {
         List<string> items = new List<string>
         {
-            "You had a bad sleep on " + daysWithBadSleep.Count + " days with low health",
-            "You did sport on " + daysWithSport.Count + " days with low health",
-            "You were sexual active on " + daysWithSex.Count + " days with low health",
-            "You drank alcohol on " + daysWithAlcohol.Count + " days with low health",
+            "You had a bad sleep on " + daysWithBadSleep.Count + " days with low health or on the day before.",
+            "You did sport on " + daysWithSport.Count + " days with low health or on the day before.",
+            "You were sexual active on " + daysWithSex.Count + " days with low health or on the day before.",
+            "You drank alcohol on " + daysWithAlcohol.Count + " days with low health or on the day before.",
         };
 
         // Use regular expression to extract the count numbers
         var regex = new Regex(@"on (\d+) days");
         var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
         return sortedItems;
-    }
-
-    protected int getAverageAirpressure()
-    {
-        int sumAirpressure = 0;
-
-        foreach(Day day in daysWithLowHealth){
-            sumAirpressure = sumAirpressure + day.AirPressure; 
-        }
-        return sumAirpressure / daysWithLowHealth.Count;
-    }    
+    }  
 }

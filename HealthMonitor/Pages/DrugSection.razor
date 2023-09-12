@@ -1,0 +1,24 @@
+@namespace HealthMonitor.Components
+@using Days;
+
+@if (daysWithDrugUsage.Count > 0)
+{
+    <RadzenAccordionItem Text="drug usage" Icon="accessibility">
+        <p>On @daysWithDrugUsage.Count days you took the following drugs</p>
+        <ul>
+            @foreach (var day in daysWithDrugUsage)
+            {
+                <li>
+                    @day.Drug
+                    <br>                                   
+                </li>
+            }
+        </ul>
+    </RadzenAccordionItem>  
+}
+
+@code {
+    [Parameter]
+
+    public List<Day> daysWithDrugUsage { get; set; } = new List<Day>();
+}

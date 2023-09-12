@@ -1,0 +1,22 @@
+@namespace HealthMonitor.Components
+@using Days;
+
+<RadzenAccordionItem Text="The average airpressure on days with low health was:" Icon="accessibility">
+    @getAverageAirpressure()
+</RadzenAccordionItem> 
+
+@code {
+    [Parameter]
+
+    public List<Day> daysWithLowHealth { get; set; } = new List<Day>();
+
+    protected int getAverageAirpressure()
+    {
+        int sumAirpressure = 0;
+
+        foreach(Day day in daysWithLowHealth){
+            sumAirpressure = sumAirpressure + day.AirPressure; 
+        }
+        return sumAirpressure / daysWithLowHealth.Count;
+    }  
+}
