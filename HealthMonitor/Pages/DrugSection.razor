@@ -4,7 +4,7 @@
 @if (daysWithDrugUsage.Count > 0)
 {
     <RadzenAccordionItem Text="drug usage" Icon="accessibility">
-        <p>On @daysWithDrugUsage.Count days you took the following drugs</p>
+        <p>On @daysWithDrugUsage.Count days in the last 30 days you took the following drugs</p>
         <ul>
             @foreach (var day in daysWithDrugUsage)
             {

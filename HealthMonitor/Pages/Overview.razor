@@ -81,9 +81,9 @@
         Func<Day, bool> isSexCondition = day => day.Sex > 0;
         Func<Day, bool> isSportCondition = day => day.Sport > 0;            
         Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0;
-        Func<Day, bool> isDrugCondition = day => day.Drug != null;
+        Func<Day, bool> isDrugCondition = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0;
         Func<Day, bool> isFoodCondition = day => day.Food != null;
-        Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;;
+        Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;
 
         daysWithLowHealthList = daysWithLowHealth
             .Select(day => new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.Comment })
