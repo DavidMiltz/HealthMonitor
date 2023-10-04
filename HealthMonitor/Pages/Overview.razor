@@ -14,9 +14,11 @@
 <h1>Overview and Statistics</h1>
 
 <br/>
-
 <RadzenAccordion>
     <Items>
+        <RadzenAccordionItem Text="Days with Bad health in the last 30 days:" Icon="accessibility">
+            @daysWithBadHealthInTheLast30Days.Count days with health below average.
+        </RadzenAccordionItem>           
         <HealthMonitor.Components.AirpressureSection daysWithLowHealth="daysWithLowHealth" />
         <RadzenAccordionItem Text="The following potential triggers could be identified:" Icon="accessibility">
             <ul>
@@ -51,6 +53,9 @@
     private List<Day> daysWithDrugUsage = new();
     private List<Day> daysWithFood = new();
     private Day previousDay = new() {};
+    private DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);     
+
+    private List<Day> daysWithBadHealthInTheLast30Days = new();
 
     RadzenScheduler<DailyHealthStatus>? scheduler;
 
@@ -78,6 +83,7 @@
         Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0;
         Func<Day, bool> isDrugCondition = day => day.Drug != null;
         Func<Day, bool> isFoodCondition = day => day.Food != null;
+        Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;;
 
         daysWithLowHealthList = daysWithLowHealth
             .Select(day => new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.Comment })
@@ -99,7 +105,9 @@
         daysWithDrugUsage.AddRange(daysBeforeLowHealth.Where(isDrugCondition)); 
 
         daysWithFood = FilterDaysWithProperty(daysWithLowHealth, isFoodCondition); 
-        daysWithFood.AddRange(daysBeforeLowHealth.Where(isFoodCondition)); 
+        daysWithFood.AddRange(daysBeforeLowHealth.Where(isFoodCondition));
+
+        daysWithBadHealthInTheLast30Days = FilterDaysWithProperty(daysWithLowHealth, isWithin30DaysCondition);
 
     }
 
