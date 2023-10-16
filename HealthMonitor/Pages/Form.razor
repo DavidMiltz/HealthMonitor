@@ -1,5 +1,5 @@
 ﻿@using Days;
-@using FileManagement;
+@using Controllers;
 @using WeatherApi;
 @inject WeatherService weatherService;
 
@@ -76,16 +76,13 @@
 
 @code {
     private Day day = new() {};
-    FileSaverService FileSaverService = new FileSaverService();
+    DaysController DaysController = new DaysController();
     private int airPressure;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         day.Date = DateTime.Now;
         airPressure = 0;
-    }
-    protected override async Task OnInitializedAsync()
-    {
         try
         {
             airPressure =  await weatherService.GetAirPressureAsync("Munich");
@@ -101,7 +98,7 @@
         if (day is not null )
         {
             day.AirPressure = airPressure;
-            FileSaverService.SaveDay( day, day.Date );
+            DaysController.SaveDay( day, day.Date );
         }
     }
 }

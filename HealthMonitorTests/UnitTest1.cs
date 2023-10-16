@@ -1,4 +1,4 @@
-using FileManagement;
+using Controllers;
 using Days;
 
 namespace Test;
@@ -6,14 +6,14 @@ namespace Test;
     public class UnitTest1
     {
             private List<Day> daysFromDisk = new();
-            FileManagement.LoadFromFile getFiles = new FileManagement.LoadFromFile();
+            Controllers.DaysController controller = new Controllers.DaysController();
 
         [Fact]
         public void PassingTest()
         {
-            daysFromDisk = getFiles.LoadAllDays();
+            daysFromDisk = controller.LoadAllDays();
         
-            Assert.Equal(4, todosFromDisk.Count);
+            Assert.Equal(4, daysFromDisk.Count);
         }
 
         int Add(int x, int y)

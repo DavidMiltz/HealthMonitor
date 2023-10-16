@@ -4,12 +4,16 @@
 @if (daysWithDrugUsage.Count > 0)
 {
     <RadzenAccordionItem Text="drug usage" Icon="accessibility">
+        @if (@daysWithDrugUsage.Count > 5)
+        {
+            <p style="color: red;">You used drugs more than 5 times the last 30 days, be careful this could lead to medication overuse!</p>
+        }
         <p>On @daysWithDrugUsage.Count days in the last 30 days you took the following drugs</p>
         <ul>
             @foreach (var day in daysWithDrugUsage)
             {
                 <li>
-                    @day.Drug
+                    @day.Date.ToString("dd.MM") :  @day.Drug
                     <br>                                   
                 </li>
             }

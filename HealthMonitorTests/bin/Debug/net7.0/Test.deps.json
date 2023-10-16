@@ -8,8 +8,8 @@
     ".NETCoreApp,Version=v7.0": {
       "Test/1.0.0": {
         "dependencies": {
-          "Microsoft.NET.Test.Sdk": "17.5.0",
           "HealthMonitor": "1.0.0",
+          "Microsoft.NET.Test.Sdk": "17.5.0",
           "coverlet.collector": "3.2.0",
           "xunit": "2.4.2",
           "xunit.runner.visualstudio": "2.4.5"
@@ -19,6 +19,36 @@
         }
       },
       "coverlet.collector/3.2.0": {},
+      "LibSassBuilder/2.0.1": {},
+      "Microsoft.AspNetCore.Authorization/7.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Metadata": "7.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.1",
+          "Microsoft.Extensions.Options": "7.0.1"
+        }
+      },
+      "Microsoft.AspNetCore.Components/7.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Authorization": "7.0.0",
+          "Microsoft.AspNetCore.Components.Analyzers": "7.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.Components.Analyzers/7.0.0": {},
+      "Microsoft.AspNetCore.Components.Forms/7.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "7.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.Components.Web/7.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "7.0.0",
+          "Microsoft.AspNetCore.Components.Forms": "7.0.0",
+          "Microsoft.Extensions.DependencyInjection": "7.0.0",
+          "Microsoft.JSInterop": "7.0.0",
+          "System.IO.Pipelines": "7.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.Metadata/7.0.0": {},
       "Microsoft.CodeCoverage/17.5.0": {
         "runtime": {
           "lib/netcoreapp3.1/Microsoft.VisualStudio.CodeCoverage.Shim.dll": {
@@ -27,6 +57,56 @@
           }
         }
       },
+      "Microsoft.Extensions.DependencyInjection/7.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0"
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/7.0.0": {},
+      "Microsoft.Extensions.Localization/7.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Localization.Abstractions": "7.0.10",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.1",
+          "Microsoft.Extensions.Options": "7.0.1"
+        },
+        "runtime": {
+          "lib/net7.0/Microsoft.Extensions.Localization.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.1023.36439"
+          }
+        }
+      },
+      "Microsoft.Extensions.Localization.Abstractions/7.0.10": {
+        "runtime": {
+          "lib/net7.0/Microsoft.Extensions.Localization.Abstractions.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.1023.36439"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/7.0.1": {
+        "runtime": {
+          "lib/net7.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.723.27404"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options/7.0.1": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Primitives": "7.0.0"
+        },
+        "runtime": {
+          "lib/net7.0/Microsoft.Extensions.Options.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.323.6910"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/7.0.0": {},
+      "Microsoft.JSInterop/7.0.0": {},
       "Microsoft.NET.Test.Sdk/17.5.0": {
         "dependencies": {
           "Microsoft.CodeCoverage": "17.5.0",
@@ -353,6 +433,20 @@
           }
         }
       },
+      "Radzen.Blazor/4.15.9": {
+        "dependencies": {
+          "LibSassBuilder": "2.0.1",
+          "Microsoft.AspNetCore.Components": "7.0.0",
+          "Microsoft.AspNetCore.Components.Web": "7.0.0",
+          "System.Linq.Dynamic.Core": "1.3.0"
+        },
+        "runtime": {
+          "lib/net7.0/Radzen.Blazor.dll": {
+            "assemblyVersion": "4.15.9.0",
+            "fileVersion": "4.15.9.0"
+          }
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
       "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
       "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
@@ -558,6 +652,7 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "System.IO.Pipelines/7.0.0": {},
       "System.Linq/4.3.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
@@ -565,6 +660,14 @@
           "System.Resources.ResourceManager": "4.3.0",
           "System.Runtime": "4.3.0",
           "System.Runtime.Extensions": "4.3.0"
+        }
+      },
+      "System.Linq.Dynamic.Core/1.3.0": {
+        "runtime": {
+          "lib/net7.0/System.Linq.Dynamic.Core.dll": {
+            "assemblyVersion": "1.3.0.0",
+            "fileVersion": "1.3.0.0"
+          }
         }
       },
       "System.Linq.Expressions/4.3.0": {
@@ -1022,6 +1125,11 @@
       },
       "xunit.runner.visualstudio/2.4.5": {},
       "HealthMonitor/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Localization": "7.0.10",
+          "Microsoft.Extensions.Localization.Abstractions": "7.0.10",
+          "Radzen.Blazor": "4.15.9"
+        },
         "runtime": {
           "HealthMonitor.dll": {}
         }
@@ -1041,12 +1149,117 @@
       "path": "coverlet.collector/3.2.0",
       "hashPath": "coverlet.collector.3.2.0.nupkg.sha512"
     },
+    "LibSassBuilder/2.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-f+7TWQtCirW94VdzKL9SaAfeSF96TeEqdtDztmTGbndrcUlZZlL6uJLZKQCXQgj1BB3OqX0584OCvqFHrkAusA==",
+      "path": "libsassbuilder/2.0.1",
+      "hashPath": "libsassbuilder.2.0.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authorization/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0O7C7XHj+17Q0geMpnpRC0fnnALH2Yhaa2SAzX00OkeF2NZ/+zWoDymbSnepg1qhueufUivihZiVGtMeq5Zywg==",
+      "path": "microsoft.aspnetcore.authorization/7.0.0",
+      "hashPath": "microsoft.aspnetcore.authorization.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8bz6m5cb5VJTftEbfMCLTcoH9+5tTAX8AuOf9z7Q86joRBkkkKYNrEozhZhZwjOStVbQIQzsYJZQQETaVALNQQ==",
+      "path": "microsoft.aspnetcore.components/7.0.0",
+      "hashPath": "microsoft.aspnetcore.components.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components.Analyzers/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UIxDb79WhKacD2L3+h+iVjwMmj46bCNsikizqIgffpqZnB0WwtJJ17jxcqXcjp/oVkcRjzoEleaMEE5ysX4tvg==",
+      "path": "microsoft.aspnetcore.components.analyzers/7.0.0",
+      "hashPath": "microsoft.aspnetcore.components.analyzers.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components.Forms/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xmcICgXAkrCQ3d4cNgD5YxtFqTPvnOl0hS7orIIziWZ3OQLAYFDpDhpITbK13iRSqsN5GXpxgzHIrAIr2ail8A==",
+      "path": "microsoft.aspnetcore.components.forms/7.0.0",
+      "hashPath": "microsoft.aspnetcore.components.forms.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components.Web/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UkwVMsRozkcKl18Qjc8jyXM/L+ehRMqDblkCGgheGU0WC/EB/yfw/cwTEbiAeztgfVlSpC6a19Zm75U+ie+RCw==",
+      "path": "microsoft.aspnetcore.components.web/7.0.0",
+      "hashPath": "microsoft.aspnetcore.components.web.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Metadata/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ut2azlKz7BQpCKu6AiwKEjMHpRWoD4qu2Ff/n6KagjFsyDAfZY7lgYJ158vr4O0jXet6pV1uF1q3jmXvki0OlA==",
+      "path": "microsoft.aspnetcore.metadata/7.0.0",
+      "hashPath": "microsoft.aspnetcore.metadata.7.0.0.nupkg.sha512"
+    },
     "Microsoft.CodeCoverage/17.5.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-6FQo0O6LKDqbCiIgVQhJAf810HSjFlOj7FunWaeOGDKxy8DAbpHzPk4SfBTXz9ytaaceuIIeR6hZgplt09m+ig==",
       "path": "microsoft.codecoverage/17.5.0",
       "hashPath": "microsoft.codecoverage.17.5.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-elNeOmkeX3eDVG6pYVeV82p29hr+UKDaBhrZyWvWLw/EVZSYEkZlQdkp0V39k/Xehs2Qa0mvoCvkVj3eQxNQ1Q==",
+      "path": "microsoft.extensions.dependencyinjection/7.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-h3j/QfmFN4S0w4C2A6X7arXij/M/OVw3uQHSOFxnND4DyAzO1F9eMX7Eti7lU/OkSthEE0WzRsfT/Dmx86jzCw==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/7.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Localization/7.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tjIcpsATkPw4QoZTqaZ+fG8tK2sNsPnjmd7pOvvXUrHFJBFKuUDSMxYZe99buSs8rynyDrebCEMSFuxukrO/yA==",
+      "path": "microsoft.extensions.localization/7.0.10",
+      "hashPath": "microsoft.extensions.localization.7.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Localization.Abstractions/7.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-drhH539FH6RWf5jRqBzDnPmxjLXwbm/HCfU1SERseNCcU3NMOK82EzC+1RlgVh+Oj7gi1k2/lL7PtoAN9j8zwQ==",
+      "path": "microsoft.extensions.localization.abstractions/7.0.10",
+      "hashPath": "microsoft.extensions.localization.abstractions.7.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/7.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pkeBFx0vqMW/A3aUVHh7MPu3WkBhaVlezhSZeb1c9XD0vUReYH1TLFSy5MxJgZfmz5LZzYoErMorlYZiwpOoNA==",
+      "path": "microsoft.extensions.logging.abstractions/7.0.1",
+      "hashPath": "microsoft.extensions.logging.abstractions.7.0.1.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/7.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pZRDYdN1FpepOIfHU62QoBQ6zdAoTvnjxFfqAzEd9Jhb2dfhA5i6jeTdgGgcgTWFRC7oT0+3XrbQu4LjvgX1Nw==",
+      "path": "microsoft.extensions.options/7.0.1",
+      "hashPath": "microsoft.extensions.options.7.0.1.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-um1KU5kxcRp3CNuI8o/GrZtD4AIOXDk+RLsytjZ9QPok3ttLUelLKpilVPuaFT3TFjOhSibUAso0odbOaCDj3Q==",
+      "path": "microsoft.extensions.primitives/7.0.0",
+      "hashPath": "microsoft.extensions.primitives.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.JSInterop/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-C9diwCnaWZ7PH3zOyf2zgcwFEqbSU11DzCnUPXCf5cqXMFeZDrEDP+M74TiCURKJ5vxImRvMtD7RiHYCtkxoXw==",
+      "path": "microsoft.jsinterop/7.0.0",
+      "hashPath": "microsoft.jsinterop.7.0.0.nupkg.sha512"
     },
     "Microsoft.NET.Test.Sdk/17.5.0": {
       "type": "package",
@@ -1110,6 +1323,13 @@
       "sha512": "sha512-eaiXkUjC4NPcquGWzAGMXjuxvLwc6XGKMptSyOGQeT0X70BUZObuybJFZLA0OfTdueLd3US23NBPTBb6iF3V1Q==",
       "path": "nuget.frameworks/5.11.0",
       "hashPath": "nuget.frameworks.5.11.0.nupkg.sha512"
+    },
+    "Radzen.Blazor/4.15.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nVBe1PQ/hyLcRs4elPGdvon1uj0BITjvthJU4sjY2wNEB1V63W/4N2K9Dpm9roumB87KM2JFMPf+pL2zY0e/Mw==",
+      "path": "radzen.blazor/4.15.9",
+      "hashPath": "radzen.blazor.4.15.9.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
@@ -1342,12 +1562,26 @@
       "path": "system.io.filesystem.primitives/4.3.0",
       "hashPath": "system.io.filesystem.primitives.4.3.0.nupkg.sha512"
     },
+    "System.IO.Pipelines/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jRn6JYnNPW6xgQazROBLSfpdoczRw694vO5kKvMcNnpXuolEixUyw6IBuBs2Y2mlSX/LdLvyyWmfXhaI3ND1Yg==",
+      "path": "system.io.pipelines/7.0.0",
+      "hashPath": "system.io.pipelines.7.0.0.nupkg.sha512"
+    },
     "System.Linq/4.3.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-5DbqIUpsDp0dFftytzuMmc0oeMdQwjcP/EWxsksIz/w1TcFRkZ3yKKz0PqiYFMmEwPSWw+qNVqD7PJ889JzHbw==",
       "path": "system.linq/4.3.0",
       "hashPath": "system.linq.4.3.0.nupkg.sha512"
+    },
+    "System.Linq.Dynamic.Core/1.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WocaU/koGKDu/kiHGJCT6ocqqygQmD5B+9nCyA3nWbMywvPVRhtre1rTHCUNdoi6ZBnPOMvkqqx8oVkP1VCy3Q==",
+      "path": "system.linq.dynamic.core/1.3.0",
+      "hashPath": "system.linq.dynamic.core.1.3.0.nupkg.sha512"
     },
     "System.Linq.Expressions/4.3.0": {
       "type": "package",
