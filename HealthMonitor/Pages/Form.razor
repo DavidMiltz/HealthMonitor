@@ -98,7 +98,7 @@
         if (day is not null )
         {
             day.AirPressure = airPressure;
-            DaysController.SaveDay( day, day.Date );
+            DaysController.SaveDay( day, day.Date, "DataBase\\" );
         }
     }
 }

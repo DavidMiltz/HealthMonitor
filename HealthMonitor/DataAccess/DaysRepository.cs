@@ -4,11 +4,10 @@ using Days;
 namespace FileManagement
 {
     public class DaysRepository : IDaysRepository{
-        public List<Day> LoadAllDays()
+        public List<Day> LoadAllDays(string DataBaseFolder)
         {
-            var path = "DataBase\\"; 
             List<Day> daysFromDisk = new List<Day>();
-            string[] files = Directory.GetFiles(path, "*.json");
+            string[] files = Directory.GetFiles(DataBaseFolder, "*.json");
             foreach (var file in files)
             {
                 string jsonString = File.ReadAllText(file);
@@ -18,12 +17,11 @@ namespace FileManagement
             return daysFromDisk; 
         }
 
-        public bool SaveDay(object _Object, DateTime _FileName)
+        public bool SaveDay(object _Object, DateTime _FileName, string DataBaseFolder)
         {
-            var path = "DataBase\\"; 
             string fileName = _FileName.ToString("yyyy-dd-M") + ".json"; 
             string jsonString = JsonSerializer.Serialize(_Object);
-            File.WriteAllText(path + fileName, jsonString);
+            File.WriteAllText(DataBaseFolder + fileName, jsonString);
             return true;
         }        
         

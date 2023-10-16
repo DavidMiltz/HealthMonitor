@@ -1,5 +1,5 @@
 ﻿@using Days;
-@using FileManagement;
+@using Controllers;
 @using HealthMonitor.Components;
 @using System;
 @using System.Collections.Generic;
@@ -60,12 +60,11 @@
     RadzenScheduler<DailyHealthStatus>? scheduler;
 
     IList<DailyHealthStatus> daysWithLowHealthList = new List<DailyHealthStatus>{};
-
-    FileLoaderService fileLoaderService = new FileLoaderService();
+    DaysController daysController = new DaysController();
 
     public Overview()
     {
-        allDays = fileLoaderService.LoadAllDays();    
+        allDays = daysController.LoadAllDays("DataBase\\");    
 
         foreach(Day day in allDays){
             if( day.HealthStatus < 5 ) {
