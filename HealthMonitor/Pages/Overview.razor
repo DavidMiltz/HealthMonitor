@@ -29,7 +29,7 @@
                 }  
             </ul>  
         </RadzenAccordionItem>          
-        <HealthMonitor.Components.DrugSection daysWithDrugUsage="daysWithDrugUsage" />  
+        <HealthMonitor.Components.DrugSection daysWithDrugUsage="daysWithDrugUsage" daysSinceLAstPainkiller="DaysSinceLastPainkiller()" />  
         <HealthMonitor.Components.FoodSection daysWithFood="daysWithFood" />   
     </Items>
 </RadzenAccordion>
@@ -129,5 +129,13 @@
         var regex = new Regex(@"on (\d+) days");
         var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
         return sortedItems;
+    }
+    protected int DaysSinceLastPainkiller()
+    {
+        var today = DateTime.Today;
+        var sortedDays = daysWithDrugUsage.OrderBy(d => Math.Abs((d.Date - today).TotalDays)).ToList();
+        var closestDay = sortedDays.FirstOrDefault();
+        TimeSpan timePassed = today - closestDay.Date;
+        return timePassed.Days;
     }  
 }

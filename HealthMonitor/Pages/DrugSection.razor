@@ -8,6 +8,7 @@
         {
             <p style="color: red;">You used drugs more than 5 times the last 30 days, be careful this could lead to medication overuse!</p>
         }
+        <p>@daysSinceLAstPainkiller days have passed since you used painkillers the last time.</p>
         <p>On @daysWithDrugUsage.Count days in the last 30 days you took the following drugs</p>
         <ul>
             @foreach (var day in daysWithDrugUsage)
@@ -25,4 +26,7 @@
     [Parameter]
 
     public List<Day> daysWithDrugUsage { get; set; } = new List<Day>();
+    
+    [Parameter]
+    public int daysSinceLAstPainkiller { get; set; }
 }
