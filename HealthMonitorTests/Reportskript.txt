@@ -1,0 +1,3 @@
+$latestFolder = Get-ChildItem "C:\Users\User\Desktop\C#Project\HealthMonitorTests\TestResults" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+$actualPath = "C:\Users\User\Desktop\C#Project\HealthMonitorTests\TestResults\$($latestFolder.Name)\coverage.cobertura.xml"
+reportgenerator -reports:$actualPath -targetdir:"coveragereport" -reporttypes:Html

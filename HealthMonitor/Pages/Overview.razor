@@ -135,7 +135,11 @@
         var today = DateTime.Today;
         var sortedDays = daysWithDrugUsage.OrderBy(d => Math.Abs((d.Date - today).TotalDays)).ToList();
         var closestDay = sortedDays.FirstOrDefault();
-        TimeSpan timePassed = today - closestDay.Date;
-        return timePassed.Days;
+        if(closestDay != null)
+        {
+            TimeSpan timePassed = today - closestDay.Date;
+            return timePassed.Days;
+        }
+        return 0;
     }  
 }

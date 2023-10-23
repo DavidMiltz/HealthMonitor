@@ -1,4 +1,32 @@
 {
     "dotnet.defaultSolution": "HealthMonitor\\HealthMonitor.sln",
     "editor.tabCompletion": "on",
+    "VsCodeTaskButtons.showCounter": true,
+    "VsCodeTaskButtons.tasks": [
+        {
+            "label": "$(notebook-move-down) Build",
+            "task": "build",
+            "tooltip": "🛠️ Start the \"build\" task"
+        },
+        {
+            "label": "$(search-refresh) Test",
+            "task": "test",
+            "tooltip": "🧹🛠️ Start the \"test\" task"
+        },
+        {
+            "label": "$(search-refresh) Watch",
+            "task": "watch",
+            "tooltip": "🧹🛠️ Start the \"watch\" task"
+        },
+        {
+            "label": "$(search-refresh) Clean",
+            "task": "clean",
+            "tooltip": "🧹🛠️ Start the \"clean\" task"
+        }, 
+        {
+            "label": "$(search-refresh) Testreport",
+            "task": "testreport",
+            "tooltip": "🧹🛠️ Start the \"testreport\" task"
+        }          
+    ]
 }

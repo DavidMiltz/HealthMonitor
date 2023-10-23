@@ -36,6 +36,41 @@
                 "${workspaceFolder}/HealthMonitor/HealthMonitor.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "clean",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/HealthMonitor/HealthMonitor.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "--logger",
+                "\"console;verbosity=detailed\"",
+                "--collect:\"XPlat Code Coverage\"",
+                "${workspaceFolder}/HealthMonitorTests/Test.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "testreport",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "$latestFolder = Get-ChildItem \"C:\\Users\\User\\Desktop\\C#Project\\HealthMonitorTests\\TestResults\" | Sort-Object LastWriteTime -Descending | Select-Object -First 1",
+                "$actualPath = \"C:\\Users\\User\\Desktop\\C#Project\\HealthMonitorTests\\TestResults\\$($latestFolder.Name)\\coverage.cobertura.xml\"",
+                "reportgenerator -reports:$actualPath -targetdir:\"coveragereport\" -reporttypes:Html",
+                "${workspaceFolder}/HealthMonitorTests/Test.csproj"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }

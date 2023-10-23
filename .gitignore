@@ -1,2 +1,5 @@
 HealthMonitor/obj/
 HealthMonitor/bin/
+HealthMonitorTests/TestResults/
+HealthMonitorTests/coveragereport/
+
