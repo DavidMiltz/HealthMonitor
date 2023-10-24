@@ -1,5 +1,3 @@
-using System;
-
 namespace RadzenBlazorDemos
 {
     public class DailyHealthStatus

@@ -1,10 +1,5 @@
-﻿@using Days;
-@using Controllers;
+﻿@using Controllers;
 @using HealthMonitor.Components;
-@using System;
-@using System.Collections.Generic;
-@using System.Linq;
-@using System.Text.RegularExpressions;
 @using RadzenBlazorDemos;
 
 @inject DialogService DialogService;
@@ -17,129 +12,32 @@
 <RadzenAccordion>
     <Items>
         <RadzenAccordionItem Text="Days with Bad health in the last 30 days:" Icon="accessibility">
-            @daysWithBadHealthInTheLast30Days.Count days with health below average.
+            @daysController.GetDaysWithIn30Days().Count days with health below average.
         </RadzenAccordionItem>           
-        <HealthMonitor.Components.AirpressureSection daysWithLowHealth="daysWithLowHealth" />
+        <HealthMonitor.Components.AirpressureSection daysWithLowHealth="@daysController.GetDaysWithLowHealth()" />
         <RadzenAccordionItem Text="The following potential triggers could be identified:" Icon="accessibility">
             <ul>
-                @foreach (var item in @printResultList())
+                @foreach (var item in @daysController.printResultList())
                 {
                         @item
                         <br>                                   
                 }  
             </ul>  
         </RadzenAccordionItem>          
-        <HealthMonitor.Components.DrugSection daysWithDrugUsage="daysWithDrugUsage" daysSinceLAstPainkiller="DaysSinceLastPainkiller()" />  
-        <HealthMonitor.Components.FoodSection daysWithFood="daysWithFood" />   
+        <HealthMonitor.Components.DrugSection daysWithDrugUsage="@daysController.GetDaysWithDrugUsage()" daysSinceLAstPainkiller="daysController.DaysSinceLastPainkiller()" />  
+        <HealthMonitor.Components.FoodSection daysWithFood="@daysController.GetDaysWithFood()" />   
     </Items>
 </RadzenAccordion>
 
 <br/>
 
-<RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="DailyHealthStatus" Data=@daysWithLowHealthList StartProperty="Start" EndProperty="End"
+<RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="DailyHealthStatus" Data="@daysController.GetDaysWithLowHealthList()" StartProperty="Start" EndProperty="End"
     TextProperty="Text" SelectedIndex="1">
     <RadzenMonthView />
     <RadzenYearView />
 </RadzenScheduler>
 
 @code {
-    private List<Day> allDays;
-    private List<Day> daysWithLowHealth = new();
-    private List<Day> daysBeforeLowHealth = new();
-    private List<Day> daysWithBadSleep = new();
-    private List<Day> daysWithSport = new();
-    private List<Day> daysWithSex = new();
-    private List<Day> daysWithAlcohol = new();
-    private List<Day> daysWithDrugUsage = new();
-    private List<Day> daysWithFood = new();
-    private Day previousDay = new() {};
-    private DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);     
-
-    private List<Day> daysWithBadHealthInTheLast30Days = new();
-
+    private DaysController daysController = new DaysController();    
     RadzenScheduler<DailyHealthStatus>? scheduler;
-
-    IList<DailyHealthStatus> daysWithLowHealthList = new List<DailyHealthStatus>{};
-    DaysController daysController = new DaysController();
-
-    public Overview()
-    {
-        allDays = daysController.LoadAllDays("DataBase\\");    
-
-        foreach(Day day in allDays){
-            if( day.HealthStatus < 5 ) {
-                daysWithLowHealth.Add(day);
-                if(previousDay != null){
-                    daysBeforeLowHealth.Add(previousDay);
-                }
-            }
-            previousDay = day;
-        }
-
-        Func<Day, bool> isBadSleepCondition = day => day.QualityOfSleep < 5;
-        Func<Day, bool> isSexCondition = day => day.Sex > 0;
-        Func<Day, bool> isSportCondition = day => day.Sport > 0;            
-        Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0;
-        Func<Day, bool> isDrugCondition = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0;
-        Func<Day, bool> isFoodCondition = day => day.Food != null;
-        Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;
-
-        daysWithLowHealthList = daysWithLowHealth
-            .Select(day => new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.Comment })
-            .ToList();
-            
-        daysWithBadSleep = FilterDaysWithProperty(daysWithLowHealth, isBadSleepCondition);
-        daysWithBadSleep.AddRange(daysBeforeLowHealth.Where(isBadSleepCondition));
-
-        daysWithSport = FilterDaysWithProperty(daysWithLowHealth, isSportCondition);  
-        daysWithSport.AddRange(daysBeforeLowHealth.Where(isSportCondition)); 
-
-        daysWithSex = FilterDaysWithProperty(daysWithLowHealth, isSexCondition);  
-        daysWithSex.AddRange(daysBeforeLowHealth.Where(isSexCondition)); 
- 
-        daysWithAlcohol = FilterDaysWithProperty(daysWithLowHealth, isAlcoholCondition); 
-        daysWithAlcohol.AddRange(daysBeforeLowHealth.Where(isAlcoholCondition)); 
-
-        daysWithDrugUsage = FilterDaysWithProperty(daysWithLowHealth, isDrugCondition); 
-        daysWithDrugUsage.AddRange(daysBeforeLowHealth.Where(isDrugCondition)); 
-
-        daysWithFood = FilterDaysWithProperty(daysWithLowHealth, isFoodCondition); 
-        daysWithFood.AddRange(daysBeforeLowHealth.Where(isFoodCondition));
-
-        daysWithBadHealthInTheLast30Days = FilterDaysWithProperty(daysWithLowHealth, isWithin30DaysCondition);
-
-    }
-
-    private List<Day> FilterDaysWithProperty(List<Day> sourceDays, Func<Day, bool> filter)
-    {
-        return sourceDays.Where(filter).ToList();
-    }
-
-    protected List<string> printResultList()
-    {
-        List<string> items = new List<string>
-        {
-            "You had a bad sleep on " + daysWithBadSleep.Count + " days with low health or on the day before.",
-            "You did sport on " + daysWithSport.Count + " days with low health or on the day before.",
-            "You were sexual active on " + daysWithSex.Count + " days with low health or on the day before.",
-            "You drank alcohol on " + daysWithAlcohol.Count + " days with low health or on the day before.",
-        };
-
-        // Use regular expression to extract the count numbers
-        var regex = new Regex(@"on (\d+) days");
-        var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
-        return sortedItems;
-    }
-    protected int DaysSinceLastPainkiller()
-    {
-        var today = DateTime.Today;
-        var sortedDays = daysWithDrugUsage.OrderBy(d => Math.Abs((d.Date - today).TotalDays)).ToList();
-        var closestDay = sortedDays.FirstOrDefault();
-        if(closestDay != null)
-        {
-            TimeSpan timePassed = today - closestDay.Date;
-            return timePassed.Days;
-        }
-        return 0;
-    }  
 }
