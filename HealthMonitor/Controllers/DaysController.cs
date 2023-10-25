@@ -4,9 +4,10 @@ using System.Text.RegularExpressions;
 
 namespace Controllers
 {
-    public class DaysController {
+    public class DaysController
+    {
         private readonly DataController dataController;
-        private readonly DateTime thirtyDaysAgo; 
+        private readonly DateTime thirtyDaysAgo;
         private readonly List<Day> allDays;
         private readonly List<Day> daysWithLowHealth;
         private readonly List<Day> daysBeforeLowHealth;
@@ -14,9 +15,9 @@ namespace Controllers
         private readonly List<Day> daysWithSport;
         private readonly List<Day> daysWithSex;
         private readonly List<Day> daysWithAlcohol;
-        private readonly Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0; 
+        private readonly Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0;
         private readonly Func<Day, bool> isBadSleepCondition = day => day.QualityOfSleep < 5;
-        private readonly Func<Day, bool> isDrugCondition; 
+        private readonly Func<Day, bool> isDrugCondition;
         private readonly Func<Day, bool> isSexCondition = day => day.Sex > 0;
         private readonly Func<Day, bool> isSportCondition = day => day.Sport > 0;
 
@@ -36,45 +37,47 @@ namespace Controllers
         private List<Day> FilterDaysWithProperty(List<Day> sourceDays, Func<Day, bool> filter)
         {
             return sourceDays.Where(filter).ToList();
-        }                     
+        }
         public List<Day> GetDaysWithLowHealth()
         {
             return allDays.Where(day => day.HealthStatus < 5).ToList();
-        }        
+        }
         public List<Day> GetDaysBeforeLowHealth()
         {
             Day? previousDay = null;
             List<Day> daysBeforeLowHealth = new();
-            
-            foreach(Day day in allDays){
-                if(day.HealthStatus < 5 && previousDay != null) {
+
+            foreach (Day day in allDays)
+            {
+                if (day.HealthStatus < 5 && previousDay != null)
+                {
                     daysBeforeLowHealth.Add(previousDay);
                 }
                 previousDay = day;
-            }            
-            return daysBeforeLowHealth; 
+            }
+            return daysBeforeLowHealth;
         }
         public List<Day> GetDaysWithAttribute(Func<Day, bool> condition)
         {
             List<Day> daysWithAttribute = new();
             daysWithAttribute = FilterDaysWithProperty(daysWithLowHealth, condition);
-            daysWithAttribute.AddRange(daysBeforeLowHealth.Where(condition));           
-            return daysWithAttribute; 
-        } 
+            daysWithAttribute.AddRange(daysBeforeLowHealth.Where(condition));
+            return daysWithAttribute;
+        }
 
         public List<Day> GetDaysWithIn30Days()
         {
-            Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;          
+            Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;
             return FilterDaysWithProperty(daysWithLowHealth, isWithin30DaysCondition);
-        } 
+        }
         public IList<DailyHealthStatus> GetDaysWithLowHealthList()
         {
             IList<DailyHealthStatus> daysWithLowHealthList;
             daysWithLowHealthList = daysWithLowHealth
             .Select(day => new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.Comment })
-            .ToList();         
+            .ToList();
             return daysWithLowHealthList;
-        }  
+        }
         public int DaysSinceLastPainkiller()
         {
             var today = DateTime.Today;
@@ -83,7 +86,7 @@ namespace Controllers
                 .FirstOrDefault();
 
             return closestDay != null ? (int)(today - closestDay.Date).TotalDays : 0;
-        }                                                     
+        }
         public List<string> printResultList()
         {
             List<string> items = new List<string>
@@ -97,6 +100,6 @@ namespace Controllers
             var regex = new Regex(@"on (\d+) days");
             var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
             return sortedItems;
-        }   
+        }
     }
 }

@@ -3,7 +3,8 @@ using Days;
 
 namespace FileManagement
 {
-    public class DaysRepository : IDaysRepository{
+    public class DaysRepository : IDaysRepository
+    {
         public List<Day> LoadAllDays(string DataBaseFolder)
         {
             List<Day> daysFromDisk = new List<Day>();
@@ -14,16 +15,16 @@ namespace FileManagement
                 Day day = JsonSerializer.Deserialize<Day>(jsonString)!;
                 daysFromDisk.Add(day);
             }
-            return daysFromDisk; 
+            return daysFromDisk;
         }
 
         public bool SaveDay(object _Object, DateTime _FileName, string DataBaseFolder)
         {
-            string fileName = _FileName.ToString("yyyy-dd-M") + ".json"; 
+            string fileName = _FileName.ToString("yyyy-dd-M") + ".json";
             string jsonString = JsonSerializer.Serialize(_Object);
             File.WriteAllText(DataBaseFolder + fileName, jsonString);
             return true;
-        }        
-        
+        }
+
     }
 }
