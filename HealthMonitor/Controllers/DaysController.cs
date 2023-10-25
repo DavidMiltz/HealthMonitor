@@ -98,6 +98,5 @@ namespace Controllers
             var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
             return sortedItems;
         }   
-
     }
 }
