@@ -9,7 +9,7 @@ namespace Test;
     public class ControllerTest : IDisposable
     {
             private List<Day> daysFromDisk = new();
-            Controllers.DaysController controller = new Controllers.DaysController();
+            Controllers.DataController controller = new Controllers.DataController();
             public string TestFolderPath { get; }
             public string TestFolderPath2 { get; }
             private readonly ITestOutputHelper output;                     
