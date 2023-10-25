@@ -1,130 +1,67 @@
 using Days;
-using FileManagement;
 using RadzenBlazorDemos;
 using System.Text.RegularExpressions;
 
 namespace Controllers
 {
     public class DaysController {
-
-        DaysRepository repository;
-        DateTime thirtyDaysAgo; 
-        List<Day> allDays;
-        List<Day> daysWithLowHealth;
-        List<Day> daysBeforeLowHealth;
-        List<Day> daysWithBadSleep;
-        List<Day> daysWithSport;
-        List<Day> daysWithSex;
-        List<Day> daysWithAlcohol;
-        List<Day> daysWithDrugUsage;
+        private readonly DataController dataController;
+        private readonly DateTime thirtyDaysAgo; 
+        private readonly List<Day> allDays;
+        private readonly List<Day> daysWithLowHealth;
+        private readonly List<Day> daysBeforeLowHealth;
+        private readonly List<Day> daysWithBadSleep;
+        private readonly List<Day> daysWithSport;
+        private readonly List<Day> daysWithSex;
+        private readonly List<Day> daysWithAlcohol;
+        private readonly Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0; 
+        private readonly Func<Day, bool> isBadSleepCondition = day => day.QualityOfSleep < 5;
+        private readonly Func<Day, bool> isDrugCondition; 
+        private readonly Func<Day, bool> isSexCondition = day => day.Sex > 0;
+        private readonly Func<Day, bool> isSportCondition = day => day.Sport > 0;
 
         public DaysController()
         {
-            repository = new DaysRepository();
+            dataController = new DataController();
             thirtyDaysAgo = DateTime.Now.AddDays(-30);
-            allDays = repository.LoadAllDays("DataBase\\");
+            allDays = dataController.LoadAllDays("DataBase\\");
             daysWithLowHealth = GetDaysWithLowHealth();
             daysBeforeLowHealth = GetDaysBeforeLowHealth();
-            daysWithBadSleep = GetDaysWithBadSleep();
-            daysWithSport = GetDaysWithSport();
-            daysWithSex = GetDaysWithSex();
-            daysWithAlcohol = GetDaysWithAlcohol();
-            daysWithDrugUsage = GetDaysWithDrugUsage();
+            daysWithAlcohol = GetDaysWithAttribute(isAlcoholCondition);
+            daysWithBadSleep = GetDaysWithAttribute(isBadSleepCondition);
+            isDrugCondition = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0;
+            daysWithSex = GetDaysWithAttribute(isSexCondition);
+            daysWithSport = GetDaysWithAttribute(isSportCondition);
         }
-        public List<Day> LoadAllDays(string DataBaseFolder)
+        private List<Day> FilterDaysWithProperty(List<Day> sourceDays, Func<Day, bool> filter)
         {
-            return repository.LoadAllDays(DataBaseFolder); 
-        }
-
-        public bool SaveDay(object _Object, DateTime _FileName, string DataBaseFolder)
-        {
-            if(repository.SaveDay(_Object, _FileName, DataBaseFolder))
-            {
-                return true;
-            }
-            return false;
-        }
+            return sourceDays.Where(filter).ToList();
+        }                     
         public List<Day> GetDaysWithLowHealth()
         {
-            List<Day> daysWithLowHealth = new();
-
-            foreach(Day day in allDays){
-                if( day.HealthStatus < 5 ) {
-                    daysWithLowHealth.Add(day);
-                }
-            }            
-            return daysWithLowHealth; 
-        }
-
+            return allDays.Where(day => day.HealthStatus < 5).ToList();
+        }        
         public List<Day> GetDaysBeforeLowHealth()
         {
-            Day previousDay = new() {};
+            Day? previousDay = null;
             List<Day> daysBeforeLowHealth = new();
             
             foreach(Day day in allDays){
-                if( day.HealthStatus < 5 ) {
-                    if(previousDay != null){
-                        daysBeforeLowHealth.Add(previousDay);
-                    }
+                if(day.HealthStatus < 5 && previousDay != null) {
+                    daysBeforeLowHealth.Add(previousDay);
                 }
                 previousDay = day;
             }            
             return daysBeforeLowHealth; 
-        }    
-        public List<Day> GetDaysWithBadSleep()
-        {
-            List<Day> daysWithBadSleep = new();
-            Func<Day, bool> isBadSleepCondition = day => day.QualityOfSleep < 5;  
-
-            daysWithBadSleep = FilterDaysWithProperty(daysWithLowHealth, isBadSleepCondition);
-            daysWithBadSleep.AddRange(daysBeforeLowHealth.Where(isBadSleepCondition));           
-            return daysWithBadSleep; 
         }
-        public List<Day> GetDaysWithSport()
+        public List<Day> GetDaysWithAttribute(Func<Day, bool> condition)
         {
-            List<Day> daysWithSport = new();
-            Func<Day, bool> isSportCondition = day => day.Sport > 0;  
+            List<Day> daysWithAttribute = new();
+            daysWithAttribute = FilterDaysWithProperty(daysWithLowHealth, condition);
+            daysWithAttribute.AddRange(daysBeforeLowHealth.Where(condition));           
+            return daysWithAttribute; 
+        } 
 
-            daysWithSport = FilterDaysWithProperty(daysWithLowHealth, isSportCondition);
-            daysWithSport.AddRange(daysBeforeLowHealth.Where(isSportCondition));           
-            return daysWithSport; 
-        }
-        public List<Day> GetDaysWithSex()
-        {
-            List<Day> daysWithSex = new();
-            Func<Day, bool> isSexCondition = day => day.Sex > 0;   
-
-            daysWithSex = FilterDaysWithProperty(daysWithLowHealth, isSexCondition);
-            daysWithSex.AddRange(daysBeforeLowHealth.Where(isSexCondition));           
-            return daysWithSex; 
-        }
-        public List<Day> GetDaysWithAlcohol()
-        {
-            List<Day> daysWithAlcohol = new();
-            Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0;  
-
-            daysWithAlcohol = FilterDaysWithProperty(daysWithLowHealth, isAlcoholCondition);
-            daysWithAlcohol.AddRange(daysBeforeLowHealth.Where(isAlcoholCondition));           
-            return daysWithAlcohol; 
-        }
-        public List<Day> GetDaysWithDrugUsage()
-        {
-            List<Day> daysWithDrugUsage = new();
-            Func<Day, bool> isDrugCondition = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0; 
-
-            daysWithDrugUsage = FilterDaysWithProperty(daysWithLowHealth, isDrugCondition);
-            daysWithDrugUsage.AddRange(daysBeforeLowHealth.Where(isDrugCondition));           
-            return daysWithDrugUsage; 
-        }
-        public List<Day> GetDaysWithFood()
-        {
-            List<Day> daysWithFood = new();
-            Func<Day, bool> isFoodCondition = day => day.Food != null;  
-
-            daysWithFood = FilterDaysWithProperty(daysWithLowHealth, isFoodCondition);
-            daysWithFood.AddRange(daysBeforeLowHealth.Where(isFoodCondition));           
-            return daysWithFood; 
-        }
         public List<Day> GetDaysWithIn30Days()
         {
             Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;          
@@ -138,7 +75,15 @@ namespace Controllers
             .ToList();         
             return daysWithLowHealthList;
         }  
+        public int DaysSinceLastPainkiller()
+        {
+            var today = DateTime.Today;
+            var closestDay = GetDaysWithAttribute(isDrugCondition)
+                .OrderBy(day => Math.Abs((day.Date - today).TotalDays))
+                .FirstOrDefault();
 
+            return closestDay != null ? (int)(today - closestDay.Date).TotalDays : 0;
+        }                                                     
         public List<string> printResultList()
         {
             List<string> items = new List<string>
@@ -153,22 +98,6 @@ namespace Controllers
             var sortedItems = items.OrderByDescending(item => int.Parse(regex.Match(item).Groups[1].Value)).ToList();
             return sortedItems;
         }   
-        public int DaysSinceLastPainkiller()
-        {
-            var today = DateTime.Today;
-            var sortedDays = daysWithDrugUsage.OrderBy(d => Math.Abs((d.Date - today).TotalDays)).ToList();
-            var closestDay = sortedDays.FirstOrDefault();
-            if(closestDay != null)
-            {
-                TimeSpan timePassed = today - closestDay.Date;
-                return timePassed.Days;
-            }
-            return 0;
-        }                                                     
-        private List<Day> FilterDaysWithProperty(List<Day> sourceDays, Func<Day, bool> filter)
-        {
-            return sourceDays.Where(filter).ToList();
-        }                     
 
     }
 }

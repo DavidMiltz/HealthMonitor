@@ -1,6 +1,7 @@
 ﻿@using Controllers;
 @using HealthMonitor.Components;
 @using RadzenBlazorDemos;
+@using Days;
 
 @inject DialogService DialogService;
 
@@ -24,8 +25,8 @@
                 }  
             </ul>  
         </RadzenAccordionItem>          
-        <HealthMonitor.Components.DrugSection daysWithDrugUsage="@daysController.GetDaysWithDrugUsage()" daysSinceLAstPainkiller="daysController.DaysSinceLastPainkiller()" />  
-        <HealthMonitor.Components.FoodSection daysWithFood="@daysController.GetDaysWithFood()" />   
+        <HealthMonitor.Components.DrugSection daysWithDrugUsage="@daysWithDrugUsage" daysSinceLAstPainkiller="daysController.DaysSinceLastPainkiller()" />  
+        <HealthMonitor.Components.FoodSection daysWithFood="@daysWithFood" />   
     </Items>
 </RadzenAccordion>
 
@@ -39,5 +40,17 @@
 
 @code {
     private DaysController daysController = new DaysController();    
-    RadzenScheduler<DailyHealthStatus>? scheduler;
+    private RadzenScheduler<DailyHealthStatus>? scheduler;
+    private DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);        
+    private Func<Day, bool> isFoodCondition = day => day.Food != null;
+    private Func<Day, bool> isDrugCondition;     
+    private List<Day> daysWithFood;
+    private List<Day> daysWithDrugUsage;
+
+    public Overview()
+    {
+        isDrugCondition = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0;
+        daysWithFood = daysController.GetDaysWithAttribute(isFoodCondition);        
+        daysWithDrugUsage = daysController.GetDaysWithAttribute(isDrugCondition);        
+    }    
 }

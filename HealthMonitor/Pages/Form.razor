@@ -76,7 +76,7 @@
 
 @code {
     private Day day = new() {};
-    DaysController DaysController = new DaysController();
+    DataController dataController = new DataController();
     private int airPressure;
 
     protected override async Task OnInitializedAsync()
@@ -98,7 +98,7 @@
         if (day is not null )
         {
             day.AirPressure = airPressure;
-            DaysController.SaveDay( day, day.Date, "DataBase\\" );
+            dataController.SaveDay( day, day.Date, "DataBase\\" );
         }
     }
 }
