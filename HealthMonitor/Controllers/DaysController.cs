@@ -11,15 +11,6 @@ namespace Controllers
         private readonly List<Day> allDays;
         private readonly List<Day> daysWithLowHealth;
         private readonly List<Day> daysBeforeLowHealth;
-        private readonly List<Day> daysWithBadSleep;
-        private readonly List<Day> daysWithSport;
-        private readonly List<Day> daysWithSex;
-        private readonly List<Day> daysWithAlcohol;
-        private readonly Func<Day, bool> isAlcoholCondition = day => day.Alcohol > 0;
-        private readonly Func<Day, bool> isBadSleepCondition = day => day.QualityOfSleep < 5;
-        private readonly Func<Day, bool> isDrugCondition;
-        private readonly Func<Day, bool> isSexCondition = day => day.Sex > 0;
-        private readonly Func<Day, bool> isSportCondition = day => day.Sport > 0;
 
         public DaysController()
         {
@@ -28,15 +19,6 @@ namespace Controllers
             allDays = dataController.LoadAllDays("DataBase\\");
             daysWithLowHealth = GetDaysWithLowHealth();
             daysBeforeLowHealth = GetDaysBeforeLowHealth();
-            daysWithAlcohol = GetDaysWithAttribute(isAlcoholCondition);
-            daysWithBadSleep = GetDaysWithAttribute(isBadSleepCondition);
-            isDrugCondition = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0;
-            daysWithSex = GetDaysWithAttribute(isSexCondition);
-            daysWithSport = GetDaysWithAttribute(isSportCondition);
-        }
-        private List<Day> FilterDaysWithProperty(List<Day> sourceDays, Func<Day, bool> filter)
-        {
-            return sourceDays.Where(filter).ToList();
         }
         public List<Day> GetDaysWithLowHealth()
         {
@@ -60,7 +42,7 @@ namespace Controllers
         public List<Day> GetDaysWithAttribute(Func<Day, bool> condition)
         {
             List<Day> daysWithAttribute = new();
-            daysWithAttribute = FilterDaysWithProperty(daysWithLowHealth, condition);
+            daysWithAttribute = daysWithLowHealth.Where(condition).ToList();
             daysWithAttribute.AddRange(daysBeforeLowHealth.Where(condition));
             return daysWithAttribute;
         }
@@ -68,9 +50,9 @@ namespace Controllers
         public List<Day> GetDaysWithIn30Days()
         {
             Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;
-            return FilterDaysWithProperty(daysWithLowHealth, isWithin30DaysCondition);
+            return daysWithLowHealth.Where(isWithin30DaysCondition).ToList();
         }
-        public IList<DailyHealthStatus> GetDaysWithLowHealthList()
+        public IList<DailyHealthStatus> GetDaysWithLowHealthForScheduler()
         {
             IList<DailyHealthStatus> daysWithLowHealthList;
             daysWithLowHealthList = daysWithLowHealth
@@ -80,21 +62,25 @@ namespace Controllers
         }
         public int DaysSinceLastPainkiller()
         {
-            var today = DateTime.Today;
-            var closestDay = GetDaysWithAttribute(isDrugCondition)
-                .OrderBy(day => Math.Abs((day.Date - today).TotalDays))
+            Func<Day, bool> hasDrugs = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0;
+            var closestDayWithDrugUsage = GetDaysWithAttribute(hasDrugs)
+                .OrderBy(day => Math.Abs((day.Date - DateTime.Today).TotalDays))
                 .FirstOrDefault();
 
-            return closestDay != null ? (int)(today - closestDay.Date).TotalDays : 0;
+            return closestDayWithDrugUsage != null ? (int)(DateTime.Today - closestDayWithDrugUsage.Date).TotalDays : 0;
         }
-        public List<string> printResultList()
+        public List<string> printPotentialTriggers()
         {
+            Func<Day, bool> hasAlcohol = day => day.Alcohol > 0;
+            Func<Day, bool> hasBadSleep = day => day.QualityOfSleep < 5;
+            Func<Day, bool> hasSex = day => day.Sex > 0;
+            Func<Day, bool> hasSport = day => day.Sport > 0;
             List<string> items = new List<string>
             {
-                "You had a bad sleep on " + daysWithBadSleep.Count + " days with low health or on the day before.",
-                "You did sport on " + daysWithSport.Count + " days with low health or on the day before.",
-                "You were sexual active on " + daysWithSex.Count + " days with low health or on the day before.",
-                "You drank alcohol on " + daysWithAlcohol.Count + " days with low health or on the day before.",
+                "You had a bad sleep on " + GetDaysWithAttribute(hasBadSleep).Count + " days with low health or on the day before.",
+                "You did sport on " + GetDaysWithAttribute(hasSport).Count + " days with low health or on the day before.",
+                "You were sexual active on " + GetDaysWithAttribute(hasSex).Count + " days with low health or on the day before.",
+                "You drank alcohol on " + GetDaysWithAttribute(hasAlcohol).Count + " days with low health or on the day before.",
             };
 
             var regex = new Regex(@"on (\d+) days");

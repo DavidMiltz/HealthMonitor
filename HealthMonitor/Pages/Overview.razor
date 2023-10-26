@@ -18,7 +18,7 @@
         <HealthMonitor.Components.AirpressureSection daysWithLowHealth="@daysController.GetDaysWithLowHealth()" />
         <RadzenAccordionItem Text="The following potential triggers could be identified:" Icon="accessibility">
             <ul>
-                @foreach (var item in @daysController.printResultList())
+                @foreach (var item in @daysController.printPotentialTriggers())
                 {
                         @item
                         <br>                                   
@@ -32,7 +32,7 @@
 
 <br/>
 
-<RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="DailyHealthStatus" Data="@daysController.GetDaysWithLowHealthList()" StartProperty="Start" EndProperty="End"
+<RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="DailyHealthStatus" Data="@daysController.GetDaysWithLowHealthForScheduler()" StartProperty="Start" EndProperty="End"
     TextProperty="Text" SelectedIndex="1">
     <RadzenMonthView />
     <RadzenYearView />
