@@ -18,11 +18,8 @@ namespace Controllers
 
         public bool SaveDay(object _Object, DateTime _FileName, string DataBaseFolder)
         {
-            if (repository.SaveDay(_Object, _FileName, DataBaseFolder))
-            {
-                return true;
-            }
-            return false;
+            repository.SaveDay(_Object, _FileName, DataBaseFolder);
+            return true;
         }
     }
 }

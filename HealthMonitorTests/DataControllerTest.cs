@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace Test;
 
-    public class ControllerTest : IDisposable
+    public class DataControllerTest : IDisposable
     {
             private List<Day> daysFromDisk = new();
             Controllers.DataController controller = new Controllers.DataController();
@@ -14,7 +14,7 @@ namespace Test;
             public string TestFolderPath2 { get; }
             private readonly ITestOutputHelper output;                     
 
-            public ControllerTest(ITestOutputHelper output)
+            public DataControllerTest(ITestOutputHelper output)
             {
                 this.output = output;                
                 List<Day> daysFromDisk = new List<Day>();

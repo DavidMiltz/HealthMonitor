@@ -8,8 +8,8 @@ namespace Controllers
     {
         private readonly DataController dataController;
         private readonly DateTime thirtyDaysAgo;
-        private readonly List<Day> allDays;
-        private readonly List<Day> daysWithLowHealth;
+        public List<Day> allDays;
+        public List<Day> daysWithLowHealth;
         private readonly List<Day> daysBeforeLowHealth;
 
         public DaysController()
@@ -78,8 +78,8 @@ namespace Controllers
             List<string> items = new List<string>
             {
                 "You had a bad sleep on " + GetDaysWithAttribute(hasBadSleep).Count + " days with low health or on the day before.",
-                "You did sport on " + GetDaysWithAttribute(hasSport).Count + " days with low health or on the day before.",
                 "You were sexual active on " + GetDaysWithAttribute(hasSex).Count + " days with low health or on the day before.",
+                "You did sport on " + GetDaysWithAttribute(hasSport).Count + " days with low health or on the day before.",
                 "You drank alcohol on " + GetDaysWithAttribute(hasAlcohol).Count + " days with low health or on the day before.",
             };
 
