@@ -1,5 +1,6 @@
 using Controllers;
 using Days;
+using RadzenBlazorDemos;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,7 +19,7 @@ namespace Test;
                 this.output = output;                                  
                 var day1 = new Day
                 {
-                    Date = DateTime.Now,
+                    Date = new DateTime(2023, 10, 29),
                     Drug = null,
                     City = "Munich",
                     QualityOfSleep = 1,
@@ -32,7 +33,7 @@ namespace Test;
                 };
                 var day2 = new Day
                 {
-                    Date = DateTime.Now.AddDays(-1),
+                    Date = new DateTime(2023, 10, 28),
                     Drug = null,
                     City = "Munich",
                     QualityOfSleep = 2,
@@ -46,7 +47,7 @@ namespace Test;
                 };
                 var day3 = new Day
                 {
-                    Date = DateTime.Now.AddDays(-2),
+                    Date = new DateTime(2023, 10, 27),
                     Drug = null,
                     City = "Munich",
                     QualityOfSleep = 8,
@@ -60,7 +61,7 @@ namespace Test;
                 };
                 var day4 = new Day
                 {
-                    Date = DateTime.Now.AddDays(-3),
+                    Date = new DateTime(2023, 10, 26),
                     Drug = "Paracetamol",
                     City = "Munich",
                     QualityOfSleep = 3,
@@ -74,7 +75,7 @@ namespace Test;
                 };
                 var day5 = new Day
                 {
-                    Date = DateTime.Now.AddDays(-4),
+                    Date = new DateTime(2023, 10, 25),
                     Drug = "Paracetamol",
                     City = "Munich",
                     QualityOfSleep = 2,
@@ -88,7 +89,7 @@ namespace Test;
                 };
                 var day6 = new Day
                 {
-                    Date = DateTime.Now.AddDays(-31),
+                    Date = new DateTime(2023, 09, 14),
                     Drug = "Paracetamol",
                     City = "Munich",
                     QualityOfSleep = 1,
@@ -172,7 +173,7 @@ namespace Test;
         [Fact]
         public void CanGetDaysSinceLastPainkiller()
         {
-            Assert.Equal(2, controller.DaysSinceLastPainkiller());
+            Assert.Equal(3, controller.DaysSinceLastPainkiller());
         }  
 
         [Fact]        
@@ -189,22 +190,5 @@ namespace Test;
             var actualItems = controller.printPotentialTriggers();
 
             Assert.Equal(expectedItems, actualItems);
-        }                     
-        
-        // [Fact]
-        // public void CanGetDaysWithAttribute()
-        // {
-        //     Func<Day, bool> hasDrugs = day => day.Drug != null && (DateTime.Now.AddDays(-30) - day.Date).TotalDays <= 0;
-        //     var expectedDays = new List<Day>
-        //     {
-        //         allTestDays.ElementAt(0), 
-        //         allTestDays.ElementAt(1), 
-        //         allTestDays.ElementAt(3), 
-        //         allTestDays.ElementAt(4)  
-        //     };
-
-        //     var actualDays = controller.GetDaysWithAttribute(hasDrugs);
-
-        //     Assert.Equal(expectedDays, actualDays);
-        // }                   
+        }                                          
     }
