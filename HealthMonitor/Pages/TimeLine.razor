@@ -1,0 +1,50 @@
+﻿@using Controllers;
+@using HealthMonitor.Components;
+@using RadzenBlazorDemos;
+@using Days;
+@using System.Globalization
+
+@inject DialogService DialogService;
+
+@page "/timeline"
+
+<h1>Timeline</h1>
+            <RadzenCard class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
+                <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
+                <RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
+                <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                <RadzenLabel Text="Show Data Labels" For="dataLabels" />
+            </RadzenCard>
+            <RadzenChart>
+                <RadzenLineSeries Smooth="@smooth" Data="@timeLineController.GetDaysWithLowHealthForTimeLine()" CategoryProperty="Date" Title="@DateTime.Now.ToString("MMMM.yyyy")" LineType="LineType.Dashed" ValueProperty="Health">
+                    <RadzenMarkers MarkerType="MarkerType.Square" />
+                    <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                </RadzenLineSeries>
+                <RadzenCategoryAxis Padding="20" Formatter="@FormatAsDayOfTheMonth" />
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true" />
+                    <RadzenAxisTitle Text="Healt Status" />
+                </RadzenValueAxis>
+            </RadzenChart>
+<br/>
+
+
+@code {
+    private TimeLineController timeLineController = new TimeLineController();       
+    bool smooth = false;
+    bool showDataLabels = false;
+
+    string FormatAsDayOfTheMonth(object value)
+    {
+        if (value != null)
+        {
+            return Convert.ToDateTime(value).ToString("dd");
+        }
+
+        return string.Empty;
+    }        
+    public TimeLine()
+    {
+      
+    }    
+}
