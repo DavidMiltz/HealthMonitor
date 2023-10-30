@@ -9,23 +9,29 @@
 @page "/timeline"
 
 <h1>Timeline</h1>
-            <RadzenCard class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
-                <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
-                <RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
-                <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
-                <RadzenLabel Text="Show Data Labels" For="dataLabels" />
-            </RadzenCard>
-            <RadzenChart>
-                <RadzenLineSeries Smooth="@smooth" Data="@timeLineController.GetDaysWithLowHealthForTimeLine()" CategoryProperty="Date" Title="@DateTime.Now.ToString("MMMM.yyyy")" LineType="LineType.Dashed" ValueProperty="Health">
-                    <RadzenMarkers MarkerType="MarkerType.Square" />
-                    <RadzenSeriesDataLabels Visible="@showDataLabels" />
-                </RadzenLineSeries>
-                <RadzenCategoryAxis Padding="20" Formatter="@FormatAsDayOfTheMonth" />
-                <RadzenValueAxis>
-                    <RadzenGridLines Visible="true" />
-                    <RadzenAxisTitle Text="Healt Status" />
-                </RadzenValueAxis>
-            </RadzenChart>
+    <InputSelect @bind-Value="selectedValue" @oninput="OnMonthSelectionChange">
+        @foreach (var month in dropdownValues)
+        {
+            <option value="@month">@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)</option>
+        }
+    </InputSelect>
+    <RadzenCard class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
+        <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
+        <RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
+        <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+        <RadzenLabel Text="Show Data Labels" For="dataLabels" />
+    </RadzenCard>
+    <RadzenChart>
+        <RadzenLineSeries Smooth="@smooth" Data="@daysForTimeLine" CategoryProperty="Date" Title="@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(actualMonth)" LineType="LineType.Dashed" ValueProperty="Health">
+            <RadzenMarkers MarkerType="MarkerType.Square" />
+            <RadzenSeriesDataLabels Visible="@showDataLabels" />
+        </RadzenLineSeries>
+        <RadzenCategoryAxis Padding="20" Formatter="@FormatAsDayOfTheMonth" />
+        <RadzenValueAxis>
+            <RadzenGridLines Visible="true" />
+            <RadzenAxisTitle Text="Health Status" />
+        </RadzenValueAxis>
+    </RadzenChart>
 <br/>
 
 
@@ -33,6 +39,10 @@
     private TimeLineController timeLineController = new TimeLineController();       
     bool smooth = false;
     bool showDataLabels = false;
+    private int actualMonth = DateTime.Today.Month;
+    IList<DailyHealthForTimeLine> daysForTimeLine;
+    private string selectedValue;
+    private List<int> dropdownValues = new List<int>(Enumerable.Range(1, 12));      
 
     string FormatAsDayOfTheMonth(object value)
     {
@@ -42,9 +52,25 @@
         }
 
         return string.Empty;
-    }        
-    public TimeLine()
+    }
+    protected override void OnInitialized()
     {
-      
-    }    
+        UpdateTimeline();
+    }
+
+    private void OnMonthSelectionChange(ChangeEventArgs e)
+    {
+        Console.WriteLine("Liras");
+        if (int.TryParse(e.Value?.ToString(), out var selectedMonth))
+        {
+            actualMonth = selectedMonth;
+            UpdateTimeline();
+        }
+    }
+
+    private void UpdateTimeline()
+    {
+        daysForTimeLine = timeLineController.GetDaysWithLowHealthForTimeLine(actualMonth);
+        StateHasChanged();
+    }         
 }

@@ -6,7 +6,6 @@ namespace Controllers
     public class TimeLineController
     {
         private readonly DataController dataController;
-        private readonly DateTime thirtyDaysAgo;
         public List<Day> allDays;
 
 
@@ -16,11 +15,11 @@ namespace Controllers
             allDays = dataController.LoadAllDays("DataBase\\");
         }
 
-        public IList<DailyHealthForTimeLine> GetDaysWithLowHealthForTimeLine()
+        public IList<DailyHealthForTimeLine> GetDaysWithLowHealthForTimeLine(int month)
         {
             IList<DailyHealthForTimeLine> allDaysForTimeLine;
             allDaysForTimeLine = allDays
-            .Where(day => day.Date.Month == DateTime.Today.Month) 
+            .Where(day => day.Date.Month == month) 
             .Select(day => new DailyHealthForTimeLine { Date = day.Date.ToString("yyyy,MM,dd"), Health = day.HealthStatus })
             .ToList();
             return allDaysForTimeLine;
