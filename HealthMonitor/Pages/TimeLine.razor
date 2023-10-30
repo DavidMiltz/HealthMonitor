@@ -8,13 +8,17 @@
 
 @page "/timeline"
 
-<h1>Timeline</h1>
-    <InputSelect @bind-Value="selectedValue" @oninput="OnMonthSelectionChange">
-        @foreach (var month in dropdownValues)
-        {
-            <option value="@month">@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)</option>
-        }
-    </InputSelect>
+<h1>Health Status Timeline</h1>
+    <br/>
+    <div class="form-group">                              
+        <label for="comment">Please select a month</label>
+        <InputSelect @bind-Value="selectedValue" @oninput="OnMonthSelectionChange">
+            @foreach (var month in dropdownValues)
+            {
+                <option value="@month">@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)</option>
+            }
+        </InputSelect>
+    </div>
     <RadzenCard class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
         <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
         <RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
