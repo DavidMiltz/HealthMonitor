@@ -33,7 +33,7 @@
         <RadzenCategoryAxis Padding="20" Formatter="@FormatAsDayOfTheMonth" />
         <RadzenValueAxis>
             <RadzenGridLines Visible="true" />
-            <RadzenAxisTitle Text="Health Status" />
+            <RadzenAxisTitle Text="Health Status 1 to 10" />
         </RadzenValueAxis>
     </RadzenChart>
 <br/>
@@ -41,12 +41,12 @@
 
 @code {
     private TimeLineController timeLineController = new TimeLineController();       
-    bool smooth = false;
-    bool showDataLabels = false;
+    bool smooth = true;
+    bool showDataLabels = true;
     private int actualMonth = DateTime.Today.Month;
-    IList<DailyHealthForTimeLine> daysForTimeLine;
-    private string selectedValue;
-    private List<int> dropdownValues = new List<int>(Enumerable.Range(1, 12));      
+    IList<DailyHealthForTimeLine>? daysForTimeLine;
+    private List<int> dropdownValues = new List<int>(Enumerable.Range(1, 12));
+    private int selectedValue = DateTime.Today.Month;      
 
     string FormatAsDayOfTheMonth(object value)
     {
@@ -64,7 +64,6 @@
 
     private void OnMonthSelectionChange(ChangeEventArgs e)
     {
-        Console.WriteLine("Liras");
         if (int.TryParse(e.Value?.ToString(), out var selectedMonth))
         {
             actualMonth = selectedMonth;
@@ -74,7 +73,7 @@
 
     private void UpdateTimeline()
     {
-        daysForTimeLine = timeLineController.GetDaysWithLowHealthForTimeLine(actualMonth);
+        daysForTimeLine = timeLineController.GetAllDaysForTimeLine(actualMonth);
         StateHasChanged();
     }         
 }

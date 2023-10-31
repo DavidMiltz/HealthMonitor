@@ -15,7 +15,7 @@ namespace Controllers
             allDays = dataController.LoadAllDays("DataBase\\");
         }
 
-        public IList<DailyHealthForTimeLine> GetDaysWithLowHealthForTimeLine(int month)
+        public IList<DailyHealthForTimeLine> GetAllDaysForTimeLine(int month)
         {
             IList<DailyHealthForTimeLine> allDaysForTimeLine;
             allDaysForTimeLine = allDays

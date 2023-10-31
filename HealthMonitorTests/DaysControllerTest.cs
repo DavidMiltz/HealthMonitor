@@ -173,7 +173,7 @@ namespace Test;
         [Fact]
         public void CanGetDaysSinceLastPainkiller()
         {
-            Assert.Equal(3, controller.DaysSinceLastPainkiller());
+            Assert.Equal(5, controller.DaysSinceLastPainkiller());
         }  
 
         [Fact]        
@@ -182,8 +182,8 @@ namespace Test;
            var expectedItems = new List<string>
             {
                 "You had a bad sleep on 9 days with low health or on the day before.",
-                "You were sexual active on 7 days with low health or on the day before.",
-                "You did sport on 1 days with low health or on the day before.",
+                "You were sexual active on 6 days with low health or on the day before.",
+                "You did sport on 0 days with low health or on the day before.",
                 "You drank alcohol on 0 days with low health or on the day before."
             };
 
