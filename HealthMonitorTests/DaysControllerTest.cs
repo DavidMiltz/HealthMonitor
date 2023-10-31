@@ -190,5 +190,34 @@ namespace Test;
             var actualItems = controller.printPotentialTriggers();
 
             Assert.Equal(expectedItems, actualItems);
-        }                                          
+        }
+
+        [Fact]
+        public void CanGetDaysWithLowHealthForScheduler()
+        {
+            var expectedList = new List<DailyHealthStatus>();
+            foreach (var day in allTestDays)
+            {
+                if (day.HealthStatus < 5)
+                {
+                    expectedList.Add(new DailyHealthStatus
+                    {
+                        Start = day.Date,
+                        End = day.Date,
+                        Text = "Low health: " + day.Comment
+                    });
+                }
+            }
+
+            var actualList = controller.GetDaysWithLowHealthForScheduler();
+
+            Assert.Equal(expectedList.Count, actualList.Count);
+
+            for (int i = 0; i < expectedList.Count; i++)
+            {
+                Assert.Equal(expectedList[i].Start, actualList[i].Start);
+                Assert.Equal(expectedList[i].End, actualList[i].End);
+                Assert.Equal(expectedList[i].Text, actualList[i].Text);
+            }
+        }                                                  
     }
