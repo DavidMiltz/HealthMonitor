@@ -24,16 +24,21 @@
         <RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
         <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
         <RadzenLabel Text="Show Data Labels" For="dataLabels" />
+         <p style="color: #4340d2;">- For the month @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(selectedValue)</p>
     </RadzenCard>
     <RadzenChart>
-        <RadzenLineSeries Smooth="@smooth" Data="@daysForTimeLine" CategoryProperty="Date" Title="@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(actualMonth)" LineType="LineType.Dashed" ValueProperty="Health">
+        <RadzenLineSeries Smooth="@smooth" Data="@daysForTimeLine" CategoryProperty="Date" Title="Health Status" LineType="LineType.Dashed" ValueProperty="Health">
+            <RadzenMarkers MarkerType="MarkerType.Square" />
+            <RadzenSeriesDataLabels Visible="@showDataLabels" />
+        </RadzenLineSeries>
+        <RadzenLineSeries Smooth="@smooth" Data="@daysForTimeLine" CategoryProperty="Date" Title="Mental Status" LineType="LineType.Dashed" ValueProperty="Mental">
             <RadzenMarkers MarkerType="MarkerType.Square" />
             <RadzenSeriesDataLabels Visible="@showDataLabels" />
         </RadzenLineSeries>
         <RadzenCategoryAxis Padding="20" Formatter="@FormatAsDayOfTheMonth" />
         <RadzenValueAxis>
             <RadzenGridLines Visible="true" />
-            <RadzenAxisTitle Text="Health Status 1 to 10" />
+            <RadzenAxisTitle Text="Status from 1 to 10" />
         </RadzenValueAxis>
     </RadzenChart>
 <br/>

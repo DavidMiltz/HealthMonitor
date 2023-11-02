@@ -55,6 +55,15 @@
             }
         </InputSelect>
     </div>
+    <div class="form-group">      
+        <label for="mentalStatus">How did you feel today mentally? 5 is average</label>
+        <InputSelect id="mentalStatus" @bind-Value="day.MentalStatus">
+            @for (int x = 0; x <= 10; x++)
+            {
+                <option value="@x">@x</option>
+            }
+        </InputSelect>
+    </div>    
     <div class="form-group">                              
         <label for="drugs">Which drugs did you take?</label>
         <InputText @bind-Value="day.Drug" />
