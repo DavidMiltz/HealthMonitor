@@ -7,7 +7,7 @@ namespace Controllers
     public class DaysController
     {
         private readonly DataController dataController;
-        private readonly DateTime thirtyDaysAgo;
+        public DateTime thirtyDaysAgo;
         public List<Day> allDays;
         public List<Day> daysWithLowHealth;
         private readonly List<Day> daysBeforeLowHealth;
@@ -42,11 +42,28 @@ namespace Controllers
         public List<Day> GetDaysWithAttribute(Func<Day, bool> condition)
         {
             List<Day> daysWithAttribute = new();
-            daysWithAttribute = daysWithLowHealth.Where(condition).ToList();
-            daysWithAttribute.AddRange(daysBeforeLowHealth.Where(condition));
+            HashSet<Day> uniqueDays = new HashSet<Day>();
+
+            foreach (var day in daysWithLowHealth.Where(condition))
+            {
+                if (!uniqueDays.Contains(day))
+                {
+                    daysWithAttribute.Add(day);
+                    uniqueDays.Add(day);
+                }
+            }
+
+            foreach (var day in daysBeforeLowHealth.Where(condition))
+            {
+                if (!uniqueDays.Contains(day))
+                {
+                    daysWithAttribute.Add(day);
+                    uniqueDays.Add(day);
+                }
+            }
+
             return daysWithAttribute;
         }
-
         public List<Day> GetDaysWithIn30Days()
         {
             Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;
@@ -60,14 +77,14 @@ namespace Controllers
             .ToList();
             return daysWithLowHealthList;
         }
-        public int DaysSinceLastPainkiller()
+        public int DaysSinceLastPainkiller(DateTime currentDate)
         {
             Func<Day, bool> hasDrugs = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0;
             var closestDayWithDrugUsage = GetDaysWithAttribute(hasDrugs)
-                .OrderBy(day => Math.Abs((day.Date - DateTime.Today).TotalDays))
+                .OrderBy(day => Math.Abs((day.Date - currentDate).TotalDays))
                 .FirstOrDefault();
 
-            return closestDayWithDrugUsage != null ? (int)(DateTime.Today - closestDayWithDrugUsage.Date).TotalDays : 0;
+            return closestDayWithDrugUsage != null ? (int)(currentDate - closestDayWithDrugUsage.Date).TotalDays : 0;
         }
         public List<string> printPotentialTriggers()
         {

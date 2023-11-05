@@ -13,13 +13,15 @@ namespace Test;
 
             private List<Day> allTestDays = new List<Day>(); 
             private List<Day> daysWithLowHealthTest = new List<Day>(); 
+            private DateTime thirtyDaysAgoTest = new DateTime(2023, 09, 29);
+            private DateTime currentDate = new DateTime(2023, 10, 29);
 
             public DaysControllerTest(ITestOutputHelper output)
             {
                 this.output = output;                                  
                 var day1 = new Day
                 {
-                    Date = new DateTime(2023, 10, 29),
+                    Date = currentDate,
                     Drug = null,
                     City = "Munich",
                     QualityOfSleep = 1,
@@ -113,7 +115,8 @@ namespace Test;
                 daysWithLowHealthTest.Add(day4);
                 daysWithLowHealthTest.Add(day5);
                 daysWithLowHealthTest.Add(day6);
-                controller.daysWithLowHealth = daysWithLowHealthTest;                                            
+                controller.daysWithLowHealth = daysWithLowHealthTest;
+                controller.thirtyDaysAgo = thirtyDaysAgoTest;                                              
             }
 
         [Fact]
@@ -172,8 +175,8 @@ namespace Test;
 
         [Fact]
         public void CanGetDaysSinceLastPainkiller()
-        {
-            Assert.Equal(5, controller.DaysSinceLastPainkiller());
+        { 
+            Assert.Equal(3, controller.DaysSinceLastPainkiller(currentDate));
         }  
 
         [Fact]        
@@ -181,7 +184,7 @@ namespace Test;
         {
            var expectedItems = new List<string>
             {
-                "You had a bad sleep on 9 days with low health or on the day before.",
+                "You had a bad sleep on 8 days with low health or on the day before.",
                 "You were sexual active on 6 days with low health or on the day before.",
                 "You did sport on 0 days with low health or on the day before.",
                 "You drank alcohol on 0 days with low health or on the day before."
