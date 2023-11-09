@@ -5,7 +5,7 @@ namespace Controllers
 {
     public class DataController
     {
-        DaysRepository repository;
+        readonly DaysRepository repository;
 
         public DataController()
         {
@@ -21,5 +21,9 @@ namespace Controllers
             repository.SaveDay(_Object, _FileName, DataBaseFolder);
             return true;
         }
+        public Day LoadDay(string DataBaseFolder, string Date)
+        {
+            return repository.LoadDay(DataBaseFolder, Date);
+        }        
     }
 }

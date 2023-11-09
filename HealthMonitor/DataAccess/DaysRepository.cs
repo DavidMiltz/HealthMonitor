@@ -18,6 +18,21 @@ namespace FileManagement
             return daysFromDisk;
         }
 
+        public Day LoadDay(string DataBaseFolder, string Date)
+        {
+            Day day = new();
+            string[] files = Directory.GetFiles(DataBaseFolder, "*.json");
+            foreach (var file in files)
+            {
+                if(Path.GetFileNameWithoutExtension(file) == Date)
+                {             
+                    string jsonString = File.ReadAllText(file);
+                    day = JsonSerializer.Deserialize<Day>(jsonString)!;
+                }
+            }
+            return day;
+        }        
+
         public bool SaveDay(object _Object, DateTime _FileName, string DataBaseFolder)
         {
             string fileName = _FileName.ToString("yyyy-dd-M") + ".json";

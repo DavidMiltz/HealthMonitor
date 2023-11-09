@@ -1,6 +1,7 @@
 ﻿@using Days;
 @using Controllers;
 @using WeatherApi;
+@inject IJSRuntime JSRuntime
 @inject WeatherService weatherService;
 
 @page "/day"
@@ -8,7 +9,7 @@
 <EditForm Model="@day" OnValidSubmit="@HandleValidSubmit" class="custom-form">
     <div class="form-group">    
         <label for="date">Date</label>
-        <InputDate id="date" @bind-Value="day.Date" />
+        <InputDate id="date" @bind-Value="day.Date" @oninput="@(e => LoadDay(e.Value.ToString()))"/>
     </div>
     <div class="form-group">
         <label for="sleep">How was your sleep?</label>
@@ -110,4 +111,31 @@
             dataController.SaveDay( day, day.Date, "DataBase\\" );
         }
     }
+    private void LoadDay(string selectedDate)
+    {
+        string formattedDate = "";    
+        if (DateTime.TryParse(selectedDate, out DateTime date))
+        {
+            formattedDate = date.ToString("yyyy-dd-M");
+        }
+        else
+        {
+            throw new ArgumentException("Invalid date string format.");
+        }          
+        var loadedDay = dataController.LoadDay("DataBase\\", formattedDate);
+        if (loadedDay != null)
+        {
+            day.QualityOfSleep = loadedDay.QualityOfSleep;
+            day.Sport = loadedDay.Sport;
+            day.Sex = loadedDay.Sex;
+            day.Alcohol = loadedDay.Alcohol;
+            day.HealthStatus = loadedDay.HealthStatus;
+            day.MentalStatus = loadedDay.MentalStatus;
+            day.Drug = loadedDay.Drug;
+            day.Food = loadedDay.Food;
+            day.Comment = loadedDay.Comment;
+            day.City = loadedDay.City;
+        }
+        StateHasChanged();    
+    }    
 }
