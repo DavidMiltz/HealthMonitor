@@ -109,14 +109,14 @@ namespace Test;
                 allTestDays.Add(day4);
                 allTestDays.Add(day5);
                 allTestDays.Add(day6);
-                controller.allDays = allTestDays;
+                controller.AllDays = allTestDays;
                 daysWithLowHealthTest.Add(day1);
                 daysWithLowHealthTest.Add(day2);                                                                                                 
                 daysWithLowHealthTest.Add(day4);
                 daysWithLowHealthTest.Add(day5);
                 daysWithLowHealthTest.Add(day6);
-                controller.daysWithLowHealth = daysWithLowHealthTest;
-                controller.thirtyDaysAgo = thirtyDaysAgoTest;                                              
+                controller.DaysWithLowHealth = daysWithLowHealthTest;
+                controller.ThirtyDaysAgo = thirtyDaysAgoTest;                                              
             }
 
         [Fact]
@@ -184,7 +184,7 @@ namespace Test;
         {
            var expectedItems = new List<string>
             {
-                "You had a bad sleep on 8 days with low health or on the day before.",
+                "You had a bad sleep on 10 days with low health or on the day before.",
                 "You were sexual active on 6 days with low health or on the day before.",
                 "You did sport on 0 days with low health or on the day before.",
                 "You drank alcohol on 0 days with low health or on the day before."

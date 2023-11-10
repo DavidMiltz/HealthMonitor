@@ -107,7 +107,7 @@ namespace Test;
                 allTestDays.Add(day4);
                 allTestDays.Add(day5);
                 allTestDays.Add(day6);
-                controller.allDays = allTestDays;                                        
+                controller.AllDays = allTestDays;                                        
             }
 
         [Fact]

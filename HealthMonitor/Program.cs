@@ -1,5 +1,6 @@
 using Radzen;
 using WeatherApi;
+using Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,8 @@ if (!string.IsNullOrEmpty(weatherApiBaseUrl))
     builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(weatherApiBaseUrl) });
 }
 
-builder.Services.AddScoped<WeatherService>(); 
+builder.Services.AddScoped<WeatherService>();
+builder.Services.AddScoped<TimeLineController>();
 
 var app = builder.Build();
 

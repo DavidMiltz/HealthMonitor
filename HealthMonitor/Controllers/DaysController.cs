@@ -6,45 +6,44 @@ namespace Controllers
 {
     public class DaysController
     {
-        private readonly DataController dataController;
-        public DateTime thirtyDaysAgo;
-        public List<Day> allDays;
-        public List<Day> daysWithLowHealth;
+        public DateTime ThirtyDaysAgo { get; set; }
+        public List<Day> AllDays { get; set; }
+        public List<Day> DaysWithLowHealth { get; set; }
         private readonly List<Day> daysBeforeLowHealth;
 
         public DaysController()
         {
-            dataController = new DataController();
-            thirtyDaysAgo = DateTime.Now.AddDays(-30);
-            allDays = dataController.LoadAllDays("DataBase\\");
-            daysWithLowHealth = GetDaysWithLowHealth();
+            DataController dataController = new DataController();
+            ThirtyDaysAgo = DateTime.Now.AddDays(-30);
+            AllDays = dataController.LoadAllDays("DataBase\\");
+            DaysWithLowHealth = GetDaysWithLowHealth();
             daysBeforeLowHealth = GetDaysBeforeLowHealth();
         }
         public List<Day> GetDaysWithLowHealth()
         {
-            return allDays.Where(day => day.HealthStatus < 5).ToList();
+            return AllDays.Where(day => day.HealthStatus < 5).ToList();
         }
         public List<Day> GetDaysBeforeLowHealth()
         {
             Day? previousDay = null;
-            List<Day> daysBeforeLowHealth = new();
+            List<Day> localDaysBeforeLowHealth = new();
 
-            foreach (Day day in allDays)
+            foreach (Day day in AllDays)
             {
                 if (day.HealthStatus < 5 && previousDay != null)
                 {
-                    daysBeforeLowHealth.Add(previousDay);
+                    localDaysBeforeLowHealth.Add(previousDay);
                 }
                 previousDay = day;
             }
-            return daysBeforeLowHealth;
+            return localDaysBeforeLowHealth;
         }
         public List<Day> GetDaysWithAttribute(Func<Day, bool> condition)
         {
             List<Day> daysWithAttribute = new();
             HashSet<Day> uniqueDays = new HashSet<Day>();
 
-            foreach (var day in daysWithLowHealth.Where(condition))
+            foreach (var day in DaysWithLowHealth.Where(condition))
             {
                 if (!uniqueDays.Contains(day))
                 {
@@ -66,20 +65,20 @@ namespace Controllers
         }
         public List<Day> GetDaysWithIn30Days()
         {
-            Func<Day, bool> isWithin30DaysCondition = day => (thirtyDaysAgo - day.Date).TotalDays <= 0;
-            return daysWithLowHealth.Where(isWithin30DaysCondition).ToList();
+            Func<Day, bool> isWithin30DaysCondition = day => (ThirtyDaysAgo - day.Date).TotalDays <= 0;
+            return DaysWithLowHealth.Where(isWithin30DaysCondition).ToList();
         }
         public IList<DailyHealthStatus> GetDaysWithLowHealthForScheduler()
         {
             IList<DailyHealthStatus> daysWithLowHealthList;
-            daysWithLowHealthList = daysWithLowHealth
+            daysWithLowHealthList = DaysWithLowHealth
             .Select(day => new DailyHealthStatus { Start = day.Date, End = day.Date, Text = "Low health: " + day.Comment })
             .ToList();
             return daysWithLowHealthList;
         }
         public int DaysSinceLastPainkiller(DateTime currentDate)
         {
-            Func<Day, bool> hasDrugs = day => day.Drug != null && (thirtyDaysAgo - day.Date).TotalDays <= 0;
+            Func<Day, bool> hasDrugs = day => day.Drug != null && (ThirtyDaysAgo - day.Date).TotalDays <= 0;
             var closestDayWithDrugUsage = GetDaysWithAttribute(hasDrugs)
                 .OrderBy(day => Math.Abs((day.Date - currentDate).TotalDays))
                 .FirstOrDefault();

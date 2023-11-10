@@ -9,7 +9,7 @@
 <EditForm Model="@day" OnValidSubmit="@HandleValidSubmit" class="custom-form">
     <div class="form-group">    
         <label for="date" title="Enter the Date of the day you want to enter or update.">Date</label>
-        <InputDate id="date" @bind-Value="day.Date" @oninput="@(e => LoadDay(e.Value.ToString()))"/>
+        <InputDate id="date" @bind-Value="day.Date" @oninput="@(e => LoadDay(e.Value?.ToString()))"/>
     </div>
     <div class="form-group">
         <label for="sleep" title="On a scale from 1 to 10: How well did you sleep?">How was your sleep?</label>
@@ -89,7 +89,6 @@
     DataController dataController = new DataController();
     private int airPressure;
     private string message = "Enter your day.";
-    private string formattedDateForMessage;
     private string color = "#4340D2";
 
     protected override async Task OnInitializedAsync()
@@ -122,9 +121,10 @@
             }
         }
     }
-    private void LoadDay(string selectedDate)
+    private void LoadDay(string? selectedDate)
     {
-        string formattedDate = "";    
+        string formattedDate = "";
+        string formattedDateForMessage = string.Empty;    
         if (DateTime.TryParse(selectedDate, out DateTime date))
         {
             formattedDate = date.ToString("yyyy-dd-M");

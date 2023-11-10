@@ -5,6 +5,7 @@
 @using System.Globalization
 
 @inject DialogService DialogService;
+@inject TimeLineController TimeLineController;
 
 @page "/timeline"
 
@@ -44,8 +45,7 @@
 <br/>
 
 
-@code {
-    private TimeLineController timeLineController = new TimeLineController();       
+@code {      
     bool smooth = true;
     bool showDataLabels = true;
     private int actualMonth = DateTime.Today.Month;
@@ -79,7 +79,7 @@
 
     private void UpdateTimeline()
     {
-        daysForTimeLine = timeLineController.GetAllDaysForTimeLine(actualMonth);
+        daysForTimeLine = TimeLineController.GetAllDaysForTimeLine(actualMonth);
         StateHasChanged();
     }         
 }
