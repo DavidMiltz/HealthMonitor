@@ -7,7 +7,7 @@
 
 @page "/overview"
 
-<h1>Overview and Statistics</h1>
+<h1 style="color: @color;">Overview and Statistics</h1>
 
 <br/>
 <RadzenAccordion>
@@ -46,6 +46,7 @@
     private Func<Day, bool> isDrugCondition;     
     private List<Day> daysWithFood;
     private List<Day> daysWithDrugUsage;
+    private string color = "#4340D2";        
 
     public Overview()
     {

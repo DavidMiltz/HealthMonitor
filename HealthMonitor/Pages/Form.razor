@@ -5,14 +5,14 @@
 @inject WeatherService weatherService;
 
 @page "/day"
-
+<h1 id="message" style="color: @color;">@message</h1>
 <EditForm Model="@day" OnValidSubmit="@HandleValidSubmit" class="custom-form">
     <div class="form-group">    
-        <label for="date">Date</label>
+        <label for="date" title="Enter the Date of the day you want to enter or update.">Date</label>
         <InputDate id="date" @bind-Value="day.Date" @oninput="@(e => LoadDay(e.Value.ToString()))"/>
     </div>
     <div class="form-group">
-        <label for="sleep">How was your sleep?</label>
+        <label for="sleep" title="On a scale from 1 to 10: How well did you sleep?">How was your sleep?</label>
         <InputSelect id="sleep" @bind-Value="day.QualityOfSleep">
             @for (int x = 0; x <= 10; x++)
             {
@@ -21,7 +21,7 @@
         </InputSelect>
     </div>
     <div class="form-group">    
-        <label for="sport">How much sport did you do?</label>
+        <label for="sport" title="On a scale from 1 to 10: How much sport did you make?">How much sport did you do?</label>
         <InputSelect id="sport" @bind-Value="day.Sport">
             @for (int x = 0; x <= 10; x++)
             {
@@ -30,7 +30,7 @@
         </InputSelect>
     </div>
     <div class="form-group">       
-        <label for="sex">Sexual activity?</label>
+        <label for="sex" title="On a scale from 1 to 10: How much sex did you have?">Sexual activity?</label>
         <InputSelect id="sex" @bind-Value="day.Sex">
             @for (int x = 0; x <= 10; x++)
             {
@@ -39,7 +39,7 @@
         </InputSelect>
     </div>
     <div class="form-group">      
-        <label for="alcohol">Did you drank alcohol?</label>
+        <label for="alcohol" title="On a scale from 1 to 10: How much alcohol did you drink?">Did you drank alcohol?</label>
         <InputSelect id="alcohol" @bind-Value="day.Alcohol">
             @for (int x = 0; x <= 10; x++)
             {
@@ -48,7 +48,7 @@
         </InputSelect>
     </div>
     <div class="form-group">      
-        <label for="healthStatus">How did you feel today? 5 is average</label>
+        <label for="healthStatus" title="On a scale from 1 to 10: How was you health this day?">How did you feel today? 5 is average</label>
         <InputSelect id="healthStatus" @bind-Value="day.HealthStatus">
             @for (int x = 0; x <= 10; x++)
             {
@@ -57,7 +57,7 @@
         </InputSelect>
     </div>
     <div class="form-group">      
-        <label for="mentalStatus">How did you feel today mentally? 5 is average</label>
+        <label for="mentalStatus" title="On a scale from 1 to 10: How did you feel mentally today?">How did you feel today mentally? 5 is average</label>
         <InputSelect id="mentalStatus" @bind-Value="day.MentalStatus">
             @for (int x = 0; x <= 10; x++)
             {
@@ -66,19 +66,19 @@
         </InputSelect>
     </div>    
     <div class="form-group">                              
-        <label for="drugs">Which drugs did you take?</label>
+        <label for="drugs" title="Enter any drugs you took this day.">Which drugs did you take?</label>
         <InputText @bind-Value="day.Drug" />
     </div>
     <div class="form-group">                              
-        <label for="comment">Did you eat something special?</label>
+        <label for="comment" title="Enter any special food you ate today.">Did you eat something special?</label>
         <InputText @bind-Value="day.Food" />
     </div>       
     <div class="form-group">                              
-        <label for="comment">Make a comment.</label>
+        <label for="comment" title="Enter any special events that happened today.">Make a comment.</label>
         <InputText @bind-Value="day.Comment" />
     </div>      
     <div class="form-group">                              
-        <label for="drugs">In which city do you live?</label>
+        <label for="city" title="Enter your city to fetch weather data for your location.">In which city do you live?</label>
         <InputText @bind-Value="day.City" />
     </div>    
     <button type="submit">Submit</button>
@@ -88,6 +88,9 @@
     private Day day = new() {};
     DataController dataController = new DataController();
     private int airPressure;
+    private string message = "Enter your day.";
+    private string formattedDateForMessage;
+    private string color = "#4340D2";
 
     protected override async Task OnInitializedAsync()
     {
@@ -108,7 +111,15 @@
         if (day is not null )
         {
             day.AirPressure = airPressure;
-            dataController.SaveDay( day, day.Date, "DataBase\\" );
+            if(dataController.SaveDay( day, day.Date, "DataBase\\" ))
+            {
+                color = "green";
+                message = "Day saved";
+            }else
+            {
+                color = "red";
+                message = "Day not saved";                
+            }
         }
     }
     private void LoadDay(string selectedDate)
@@ -117,12 +128,22 @@
         if (DateTime.TryParse(selectedDate, out DateTime date))
         {
             formattedDate = date.ToString("yyyy-dd-M");
+            formattedDateForMessage = date.ToString("dd.MMMM");
+            color = "#4340D2";
+            if (date.Date != DateTime.Today)
+            {
+                message = "Update " + formattedDateForMessage;
+            }
+            else
+            {
+                message = "Enter your day.";
+            }
         }
         else
         {
             throw new ArgumentException("Invalid date string format.");
         }          
-        var loadedDay = dataController.LoadDay("DataBase\\", formattedDate);
+        Day loadedDay = dataController.LoadDay("DataBase\\", formattedDate);
         if (loadedDay != null)
         {
             day.QualityOfSleep = loadedDay.QualityOfSleep;
@@ -135,7 +156,6 @@
             day.Food = loadedDay.Food;
             day.Comment = loadedDay.Comment;
             day.City = loadedDay.City;
-        }
-        StateHasChanged();    
+        }  
     }    
 }

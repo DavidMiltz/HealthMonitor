@@ -18,8 +18,7 @@ namespace Controllers
 
         public bool SaveDay(object _Object, DateTime _FileName, string DataBaseFolder)
         {
-            repository.SaveDay(_Object, _FileName, DataBaseFolder);
-            return true;
+            return repository.SaveDay(_Object, _FileName, DataBaseFolder);
         }
         public Day LoadDay(string DataBaseFolder, string Date)
         {

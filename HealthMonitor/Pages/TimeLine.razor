@@ -8,7 +8,7 @@
 
 @page "/timeline"
 
-<h1>Health Status Timeline</h1>
+<h1 style="color: @color;">Health Status Timeline</h1>
     <br/>
     <div class="form-group">                              
         <label for="comment">Please select a month</label>
@@ -51,7 +51,8 @@
     private int actualMonth = DateTime.Today.Month;
     IList<DailyHealthForTimeLine>? daysForTimeLine;
     private List<int> dropdownValues = new List<int>(Enumerable.Range(1, 12));
-    private int selectedValue = DateTime.Today.Month;      
+    private int selectedValue = DateTime.Today.Month;   
+    private string color = "#4340D2";       
 
     string FormatAsDayOfTheMonth(object value)
     {
