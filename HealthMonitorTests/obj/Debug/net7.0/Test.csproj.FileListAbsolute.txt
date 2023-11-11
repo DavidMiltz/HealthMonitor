@@ -350,3 +350,12 @@ C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\DataBase\202
 C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\DataBase\2023-08-11.json
 C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\DataBase\2023-09-11.json
 C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\DataBase\2023-10-11.json
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\AngleSharp.dll
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\AngleSharp.Css.dll
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\AngleSharp.Diffing.dll
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\Bunit.Core.dll
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\AngleSharpWrappers.dll
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\Bunit.Web.dll
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\Microsoft.AspNetCore.Components.WebAssembly.dll
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\Microsoft.AspNetCore.Components.WebAssembly.Authentication.dll
+C:\Users\User\Desktop\C#Project\HealthMonitorTests\bin\Debug\net7.0\Microsoft.JSInterop.WebAssembly.dll

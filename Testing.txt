@@ -1,0 +1,4 @@
+1. Applikation nicht starten.
+2. Configuration: C#: HealthMonitor [http] wählen
+3. Test starten.
+

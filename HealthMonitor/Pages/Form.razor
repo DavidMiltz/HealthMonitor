@@ -30,8 +30,8 @@
         </InputSelect>
     </div>
     <div class="form-group">       
-        <label for="sex" title="On a scale from 1 to 10: How much sex did you have?">Sexual activity?</label>
-        <InputSelect id="sex" @bind-Value="day.Sex">
+        <label for="merkmal" title="On a scale from 1 to 10: How much merkmal did you have?">Merkmal activity?</label>
+        <InputSelect id="merkmal" @bind-Value="day.Merkmal">
             @for (int x = 0; x <= 10; x++)
             {
                 <option value="@x">@x</option>
@@ -148,7 +148,7 @@
         {
             day.QualityOfSleep = loadedDay.QualityOfSleep;
             day.Sport = loadedDay.Sport;
-            day.Sex = loadedDay.Sex;
+            day.Merkmal = loadedDay.Merkmal;
             day.Alcohol = loadedDay.Alcohol;
             day.HealthStatus = loadedDay.HealthStatus;
             day.MentalStatus = loadedDay.MentalStatus;

@@ -7,6 +7,28 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "url": "https://localhost:5163"
-        }
-    ]
-}
+        },
+        {
+            "name": ".NET Core Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/HealthMonitorTests/bin/Debug/net7.0/HealthMonitor.dll",
+            "args": [
+              "--configuration",
+              "Debug",
+              "--logger",
+              "trx",
+              "--diag",
+              "${workspaceFolder}/testResults/log.txt"
+            ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+          }
+        ]
+      }    
+      
+      
+      

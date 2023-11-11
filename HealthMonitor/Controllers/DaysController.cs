@@ -89,12 +89,12 @@ namespace Controllers
         {
             Func<Day, bool> hasAlcohol = day => day.Alcohol > 0;
             Func<Day, bool> hasBadSleep = day => day.QualityOfSleep < 5;
-            Func<Day, bool> hasSex = day => day.Sex > 0;
+            Func<Day, bool> hasMerkmal = day => day.Merkmal > 0;
             Func<Day, bool> hasSport = day => day.Sport > 0;
             List<string> items = new List<string>
             {
                 "You had a bad sleep on " + GetDaysWithAttribute(hasBadSleep).Count + " days with low health or on the day before.",
-                "You were sexual active on " + GetDaysWithAttribute(hasSex).Count + " days with low health or on the day before.",
+                "You were merkmal active on " + GetDaysWithAttribute(hasMerkmal).Count + " days with low health or on the day before.",
                 "You did sport on " + GetDaysWithAttribute(hasSport).Count + " days with low health or on the day before.",
                 "You drank alcohol on " + GetDaysWithAttribute(hasAlcohol).Count + " days with low health or on the day before.",
             };

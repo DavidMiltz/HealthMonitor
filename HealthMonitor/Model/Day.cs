@@ -15,7 +15,7 @@ namespace Days
         public int HealthStatus { get; set; }
         public int MentalStatus { get; set; }
         public int Sport { get; set; }
-        public int Sex { get; set; }
+        public int Merkmal { get; set; }
         public int Alcohol { get; set; }
         public int AirPressure { get; set; }
         public string Comment { get; set; }
