@@ -18,7 +18,12 @@ namespace Controllers
             IList<DailyHealthForTimeLine> allDaysForTimeLine;
             allDaysForTimeLine = AllDays
             .Where(day => day.Date.Month == month) 
-            .Select(day => new DailyHealthForTimeLine { Date = day.Date.ToString("yyyy,MM,dd"), Health = day.HealthStatus, Mental = day.MentalStatus })
+            .Select(day => new DailyHealthForTimeLine { 
+                Date = day.Date.ToString("yyyy,MM,dd"), 
+                Health = day.HealthStatus, 
+                Mental = day.MentalStatus, 
+                Merkmal = day.Merkmal, 
+                AirPressure = day.AirPressure })
             .ToList();
             return allDaysForTimeLine;
         }

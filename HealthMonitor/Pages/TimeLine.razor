@@ -36,6 +36,10 @@
             <RadzenMarkers MarkerType="MarkerType.Square" />
             <RadzenSeriesDataLabels Visible="@showDataLabels" />
         </RadzenLineSeries>
+        <RadzenLineSeries Smooth="@smooth" Data="@daysForTimeLine" CategoryProperty="Date" Title="Merkmal Status" LineType="LineType.Dashed" ValueProperty="Merkmal">
+            <RadzenMarkers MarkerType="MarkerType.Square" />
+            <RadzenSeriesDataLabels Visible="@showDataLabels" />
+        </RadzenLineSeries>                 
         <RadzenCategoryAxis Padding="20" Formatter="@FormatAsDayOfTheMonth" />
         <RadzenValueAxis>
             <RadzenGridLines Visible="true" />
