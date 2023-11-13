@@ -44,7 +44,16 @@ namespace WeatherApi
         {
             string url = $"https://api.openweathermap.org/data/2.5/weather?q={city},Germany&appid={_apiKey}&units=metric";
 
-            return await _httpClient.GetFromJsonAsync<WeatherResponse>(url);
+            var response = await _httpClient.GetFromJsonAsync<WeatherResponse>(url);
+
+            if (response != null)
+            {
+                return response;
+            }
+            else
+            {
+                throw new InvalidOperationException("Weather response is null.");
+            }
         }
     }
 
