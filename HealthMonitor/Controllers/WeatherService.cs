@@ -14,24 +14,37 @@ namespace WeatherApi
         {
             try
             {
-                string url = $"https://api.openweathermap.org/data/2.5/weather?q={city},Germany&appid={_apiKey}&units=metric";
+                var response = await GetWeatherDataAsync(city);
 
-                var response = await _httpClient.GetFromJsonAsync<WeatherResponse>(url);
-
-                if (response != null && response.Main != null)
-                {
-                    return response.Main.Pressure;
-                }
-                else
-                {
-                    return 0;
-                }
+                return response?.Main?.Pressure ?? 0;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return 0;
             }
+        }
+
+        public async Task<double> GetTempAsync(string city)
+        {
+            try
+            {
+                var response = await GetWeatherDataAsync(city);
+
+                return response?.Main?.Temp ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        private async Task<WeatherResponse> GetWeatherDataAsync(string city)
+        {
+            string url = $"https://api.openweathermap.org/data/2.5/weather?q={city},Germany&appid={_apiKey}&units=metric";
+
+            return await _httpClient.GetFromJsonAsync<WeatherResponse>(url);
         }
     }
 
@@ -43,5 +56,6 @@ namespace WeatherApi
     public class MainData
     {
         public int Pressure { get; set; }
+        public double Temp { get; set; }
     }
 }

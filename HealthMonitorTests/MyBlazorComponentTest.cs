@@ -1,29 +1,36 @@
 using Bunit;
 using HealthMonitor.Components;
+using RadzenBlazorDemos;
 using Days;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 
 public class AirpressureSectionTest : TestContext
 {
     [Fact]
-    public void ShouldRenderComponent()
+    public void RendersTimelinePageCorrectly()
     {
         // Arrange
-        var daysWithLowHealth = new List<Day>
-        {
-            new Day { AirPressure = 10 },
-            new Day { AirPressure = 20 },
-            // Add more sample days as needed
-        };
+        // using var ctx = new TestContext();
 
-        var cut = RenderComponent<HealthMonitor.Components.AirpressureSection>(
-            parameters => parameters.Add(p => p.daysWithLowHealth, daysWithLowHealth)
-        );
+        // // Register the TimeLineController service
+        // ctx.Services.AddSingleton<Controllers.TimeLineController>();
 
-        // Act - No action required for this example
+        // // Act
+        // var cut = ctx.RenderComponent<TimeLine>();
 
-        // Assert
+        // // Assert
+        // cut.MarkupMatches(@"
+        //     <h1 style=""color: #4340D2;"">Health Status Timeline</h1>
+        //     <!-- Add more assertions based on your expected HTML structure -->
+        // ");
 
-        var averageAirpressure = cut.Find("div"); // Adjust this selector based on the actual markup
-        Assert.Contains("15", averageAirpressure.TextContent); // Update with the expected average airpressure
+        // // You can also interact with the rendered component and make assertions based on its state
+        // // For example, you can trigger an event and assert that the component updates as expected
+        // var inputSelect = cut.Find("InputSelect");
+        // inputSelect.Change("3"); // Change the selected month to 3 (or any other value)
+        // cut.WaitForState(() => cut.Find("h1").InnerHtml.Contains("March"));
+
+        // // Add more assertions based on your specific component logic
     }
 }

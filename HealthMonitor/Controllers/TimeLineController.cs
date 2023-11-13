@@ -23,7 +23,8 @@ namespace Controllers
                 Health = day.HealthStatus, 
                 Mental = day.MentalStatus, 
                 Merkmal = day.Merkmal, 
-                AirPressure = day.AirPressure })
+                AirPressure = day.AirPressure,
+                Temp = day.Temp })
             .ToList();
             return allDaysForTimeLine;
         }

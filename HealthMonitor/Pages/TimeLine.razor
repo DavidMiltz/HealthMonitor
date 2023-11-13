@@ -4,9 +4,10 @@
 @using Days;
 @using System.Globalization
 
-@inject DialogService DialogService;
+
 @inject TimeLineController TimeLineController;
 
+@namespace HealthMonitor.Components
 @page "/timeline"
 
 <h1 style="color: @color;">Health Status Timeline</h1>
@@ -39,7 +40,11 @@
         <RadzenLineSeries Smooth="@smooth" Data="@daysForTimeLine" CategoryProperty="Date" Title="Merkmal Status" LineType="LineType.Dashed" ValueProperty="Merkmal">
             <RadzenMarkers MarkerType="MarkerType.Square" />
             <RadzenSeriesDataLabels Visible="@showDataLabels" />
-        </RadzenLineSeries>                 
+        </RadzenLineSeries>   
+        <RadzenLineSeries Smooth="@smooth" Data="@daysForTimeLine" CategoryProperty="Date" Title="Temperature Status" LineType="LineType.Dashed" ValueProperty="Temp">
+            <RadzenMarkers MarkerType="MarkerType.Square" />
+            <RadzenSeriesDataLabels Visible="@showDataLabels" />
+        </RadzenLineSeries>                       
         <RadzenCategoryAxis Padding="20" Formatter="@FormatAsDayOfTheMonth" />
         <RadzenValueAxis>
             <RadzenGridLines Visible="true" />

@@ -88,6 +88,7 @@
     private Day day = new() {};
     DataController dataController = new DataController();
     private int airPressure;
+    private double temp;
     private string message = "Enter your day.";
     private string color = "#4340D2";
 
@@ -95,9 +96,11 @@
     {
         day.Date = DateTime.Now;
         airPressure = 0;
+        temp = 0;
         try
         {
             airPressure =  await weatherService.GetAirPressureAsync("Munich");
+            temp =  await weatherService.GetTempAsync("Munich");
         }
         catch (Exception ex)
         {
@@ -110,6 +113,7 @@
         if (day is not null )
         {
             day.AirPressure = airPressure;
+            day.Temp = (int)Math.Round(temp);
             if(dataController.SaveDay( day, day.Date, "DataBase\\" ))
             {
                 color = "green";
